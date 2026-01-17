@@ -1,0 +1,51 @@
+doctor_name,specialization,qualification,years_of_experience,clinic_or_hospital,city,locality,consultation_fee_inr,phone,email,availability_days,rating,languages_spoken,consultation_type
+Dr. Rajesh Patil,Cardiologist,"MBBS, MD, DM (Cardiology)",22,Patil Heart Center,Mumbai,Dadar,1500,9820012345,dr.rajeshpatil@gmail.com,Mon-Sat,4.8,"Marathi, Hindi, English",Both
+Dr. Sneha Kulkarni,Pediatrician,"MBBS, MD (Pediatrics)",12,Little Stars Clinic,Mumbai,Andheri West,800,9833054321,contact@littlestars.in,Mon-Fri,4.7,"Marathi, English",In-person
+Dr. Amit Shah,Dermatologist,"MBBS, DDVL",15,Skin & Hair Care,Mumbai,Bandra,1200,9819076543,dr.amitshah@skincare.com,Tue-Sat,4.5,"Hindi, English, Gujarati",Both
+Dr. Meera Deshmukh,Gynecologist,"MBBS, MS (OBG)",18,Matoshree Hospital,Mumbai,Borivali,1000,9821098765,dr.meera@matoshree.org,Mon-Sat,4.9,"Marathi, Hindi",In-person
+Dr. Vikram Joshi,Orthopedic,"MBBS, MS (Ortho)",20,Joint Care Clinic,Mumbai,Chembur,1100,9820055443,v.joshi@orthoclinic.com,Mon-Fri,4.6,"Marathi, Hindi, English",In-person
+Dr. Rahul Gawande,General Physician,"MBBS, MD (General Medicine)",10,Pune Wellness Clinic,Pune,Kothrud,600,9123456780,dr.rahul@punewellness.com,Mon-Sat,4.4,"Marathi, Hindi, English",Both
+Dr. Anjali More,Neurologist,"MBBS, MD, DM (Neurology)",25,Sahyadri Hospital,Pune,Deccan,2000,9223456781,anjali.more@sahyadri.com,Mon-Fri,4.9,"Marathi, English",In-person
+Dr. Sameer Deshpande,ENT Specialist,"MBBS, MS (ENT)",14,Echo ENT Center,Pune,Viman Nagar,700,9323456782,info@echoent.in,Mon-Sat,4.5,"Marathi, Hindi",Both
+Dr. Priya Marathe,Dentist,BDS,8,Smile Dental Clinic,Pune,Baner,500,9423456783,drpriya@smiledental.com,Mon-Sat,4.7,"Marathi, Hindi, English",In-person
+Dr. Nitin Gadkari,Ophthalmologist,"MBBS, MS (Ophth)",30,Vision Eye Hospital,Pune,Hadapsar,900,9523456784,dr.nitin@visioneye.com,Mon-Fri,4.8,"Marathi, Hindi",In-person
+Dr. Vikas Mahajan,General Surgeon,"MBBS, MS (General Surgery)",17,Mahajan Surgical Home,Nagpur,Dharampeth,800,9623456785,dr.vikas@mahajan.com,Mon-Sat,4.6,"Hindi, Marathi",In-person
+Dr. Sunita Rao,Pediatrician,"MBBS, DCH",11,Nagpur Kids Care,Nagpur,Sitabuldi,500,9723456786,sunita.rao@kidscare.com,Mon-Sat,4.5,"Hindi, Marathi, English",Both
+Dr. Prashant Dongre,Cardiologist,"MBBS, MD, DM",19,Orange City Heart Inst.,Nagpur,Sadar,1200,9823456787,p.dongre@orangeheart.in,Mon-Fri,4.7,"Hindi, English",In-person
+Dr. Kavita Wankhede,Gynecologist,"MBBS, DGO",15,Wankhede Nursing Home,Nagpur,Bajaj Nagar,700,9923456788,kavita@wankhede.org,Mon-Sat,4.4,"Marathi, Hindi",In-person
+Dr. Manoj Tiwari,Dermatologist,"MBBS, MD",9,Glow Skin Clinic,Nagpur,Itwari,600,9023456789,manoj.t@glowskin.com,Tue-Sun,4.3,"Hindi, Marathi",Both
+Dr. Sunit Bhalerao,Orthopedic,"MBBS, D.Ortho",16,Bhalerao Accident Hospital,Nashik,Panchavati,750,9111112222,dr.sunit@bhalerao.com,Mon-Sat,4.7,"Marathi, Hindi",In-person
+Dr. Leena Kher,Dermatologist,"MBBS, MD",12,Kher Skin Care,Nashik,College Road,900,9222223333,leena.kher@skincare.com,Mon-Fri,4.6,"Marathi, English",Both
+Dr. Ashish Hire,General Physician,MBBS,22,Hire Medical Center,Nashik,Indiranagar,500,9333334444,ashish.hire@gmail.com,Mon-Sat,4.5,"Marathi, Hindi, English",In-person
+Dr. Poonam Shinde,Pediatrician,"MBBS, MD",10,Shinde Children Clinic,Nashik,Satpur,450,9444445555,dr.poonam@shinde.in,Mon-Sat,4.8,"Marathi, Hindi",Both
+Dr. Sanjay Raut,ENT Specialist,"MBBS, MS",18,Nashik ENT Care,Nashik,Nashik Road,700,9555556666,sanjay.raut@entcare.com,Mon-Fri,4.4,"Marathi, Hindi",In-person
+Dr. Varun Thakur,Cardiologist,"MBBS, MD, DM",20,Thakur Heart Inst.,Thane,Majiwada,1400,9666667777,drvarun@heartinst.com,Mon-Sat,4.9,"Marathi, Hindi, English",Both
+Dr. Reema Sen,Gynecologist,"MBBS, MS",14,Sen Maternity Home,Thane,Ghodbunder Road,1000,9777778888,reema.sen@maternity.com,Mon-Fri,4.7,"Hindi, English",In-person
+Dr. Milind Soman,General Physician,"MBBS, MD",25,Soman Family Clinic,Thane,Naupada,600,9888889999,milind.soman@gmail.com,Mon-Sat,4.6,"Marathi, English",In-person
+Dr. Pooja Hegde,Dentist,BDS,7,Bright Smile Dental,Thane,Vartak Nagar,500,9999990000,pooja.h@brightsmile.com,Mon-Sat,4.5,"Hindi, Marathi",Both
+Dr. Amol Palekar,Orthopedic,"MBBS, MS",19,Palekar Ortho Center,Thane,Kalwa,900,9100001111,amol.palekar@ortho.in,Mon-Fri,4.8,"Marathi, Hindi",In-person
+Dr. Shreya Ghoshal,Pediatrician,"MBBS, MD",13,Ghoshal Kids Clinic,Chhatrapati Sambhajinagar,Cidco,500,9200002222,shreya.g@kidsclinic.com,Mon-Sat,4.7,"Marathi, Hindi, English",Both
+Dr. Uday Mane,General Surgeon,"MBBS, MS",21,Mane Hospital,Chhatrapati Sambhajinagar,Gulmandi,700,9300003333,uday.mane@mane.org,Mon-Sat,4.5,"Marathi, Hindi",In-person
+Dr. Vidya Balan,Gynecologist,"MBBS, DGO",16,Balan Women Care,Chhatrapati Sambhajinagar,Garkheda,600,9400004444,vidya.b@womencare.com,Mon-Fri,4.6,"Marathi, Hindi",In-person
+Dr. Atul Kasbekar,Dermatologist,"MBBS, DDV",11,Skin Solutions,Chhatrapati Sambhajinagar,Waluj,550,9500005555,atul.k@skinsol.com,Mon-Sat,4.4,"Hindi, Marathi",Both
+Dr. Nana Patekar,General Physician,MBBS,28,Patekar Clinic,Chhatrapati Sambhajinagar,Railway Station Area,400,9600006666,nana.p@patekar.in,Mon-Sat,4.8,"Marathi, Hindi",In-person
+Dr. Suresh Gopi,Ophthalmologist,"MBBS, MS",24,Netra Eye Clinic,Solapur,Jule Solapur,600,9700007777,suresh.g@netra.com,Mon-Fri,4.7,"Marathi, Kannada, Hindi",In-person
+Dr. Radhika Apte,Pediatrician,"MBBS, DCH",9,Apte Children Hospital,Solapur,Murarji Peth,400,9800008888,radhika.a@apte.com,Mon-Sat,4.5,"Marathi, Hindi",Both
+Dr. Girish Karnad,General Physician,MBBS,35,Karnad Clinic,Solapur,Navi Peth,300,9900009999,girish.k@gmail.com,Mon-Sat,4.9,"Marathi, Kannada",In-person
+Dr. Sai Tamhankar,Gynecologist,"MBBS, MS",12,Tamhankar Nursing Home,Solapur,Hotgi Road,500,9000000000,sai.t@tamhankar.in,Mon-Fri,4.6,"Marathi, Hindi",In-person
+Dr. Makarand Anaspure,Dentist,BDS,15,Smile Care Solapur,Solapur,Saat Rasta,450,9121212121,mak.a@smilecare.com,Mon-Sat,4.4,"Marathi, Hindi",Both
+Dr. Ashutosh Rana,Orthopedic,"MBBS, MS",18,Rana Bone & Joint,Amravati,Morshi Road,700,9222222222,ashutosh.r@rana.in,Mon-Sat,4.7,"Hindi, Marathi",In-person
+Dr. Renuka Shahane,Pediatrician,"MBBS, MD",20,Shahane Kids Clinic,Amravati,Rajapeth,500,9333333333,renuka.s@kids.com,Mon-Fri,4.8,"Marathi, Hindi, English",Both
+Dr. Sachin Khedekar,General Physician,MBBS,25,Khedekar Clinic,Amravati,Badnera Road,400,9444444444,sachin.k@gmail.com,Mon-Sat,4.6,"Marathi, Hindi",In-person
+Dr. Sonali Kulkarni,Gynecologist,"MBBS, DGO",14,Kulkarni Hospital,Amravati,Camp,600,9555555555,sonali.k@hospital.com,Mon-Fri,4.5,"Marathi, Hindi",In-person
+Dr. Jitendra Joshi,ENT Specialist,"MBBS, MS",11,Joshi ENT Care,Amravati,Gadge Nagar,550,9666666666,jitendra.j@ent.in,Mon-Sat,4.4,"Marathi, Hindi",Both
+Dr. Dilip Prabhavalkar,General Physician,MBBS,40,Prabhavalkar Clinic,Kolhapur,Rajarampuri,300,9777777777,dilip.p@clinic.in,Mon-Sat,5.0,"Marathi, English",In-person
+Dr. Sonali Bendre,Dermatologist,"MBBS, MD",15,Bendre Skin Clinic,Kolhapur,Tarabai Park,800,9888888888,sonali.b@skin.in,Mon-Fri,4.7,"Marathi, Hindi, English",Both
+Dr. Riteish Deshmukh,Orthopedic,"MBBS, MS",13,Deshmukh Ortho Hospital,Kolhapur,Shahupuri,700,9999999999,riteish.d@ortho.in,Mon-Sat,4.6,"Marathi, Hindi",In-person
+Dr. Genelia Dsouza,Pediatrician,"MBBS, MD",10,Dsouza Kids Care,Kolhapur,Laxmipuri,500,9011111111,genelia.d@kids.in,Mon-Sat,4.8,"English, Hindi, Marathi",Both
+Dr. Mahesh Manjrekar,General Surgeon,"MBBS, MS",22,Manjrekar Surgical,Kolhapur,Kawala Naka,850,9122222222,mahesh.m@surgical.in,Mon-Fri,4.5,"Marathi, Hindi",In-person
+Dr. Sunil Shetty,Cardiologist,"MBBS, MD, DM",21,Shetty Heart Hospital,Navi Mumbai,Vashi,1500,9233333333,sunil.s@heart.in,Mon-Sat,4.9,"Hindi, English, Tulu",Both
+Dr. Shilpa Shetty,Dermatologist,"MBBS, MD",16,Shilpa Skin Studio,Navi Mumbai,Nerul,1200,9344444444,shilpa.s@skin.in,Mon-Fri,4.7,"Hindi, English",Both
+Dr. John Abraham,Physiotherapist,BPT,12,Abraham Fitness & Rehab,Navi Mumbai,Belapur,800,9455555555,john.a@rehab.in,Mon-Sat,4.8,"English, Hindi",In-person
+Dr. Vidya Balan,Gynecologist,"MBBS, MS",18,Balan Women Clinic,Navi Mumbai,Kopar Khairane,1000,9566666666,vidya.b@women.in,Mon-Sat,4.6,"Hindi, Marathi",In-person
+Dr. Ayushmann Khurrana,ENT Specialist,"MBBS, MS",9,Khurrana ENT Center,Navi Mumbai,Airoli,700,9677777777,ayush.k@ent.in,Mon-Sat,4.5,"Hindi, Punjabi, English",Both

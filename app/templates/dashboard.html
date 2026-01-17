@@ -113,16 +113,31 @@
                 <div class="card-body">
                     <div class="row g-3 align-items-end">
                         <div class="col-md-4">
-                            <label class="form-label" for="doctorArea">Area (fixed)</label>
-                            <input type="text" class="form-control" id="doctorArea" value="Nagpur" readonly>
+                            <label class="form-label" for="doctorCity">City</label>
+                            <select id="doctorCity" class="form-select">
+                                <option value="">Select city</option>
+                                <option value="Mumbai">Mumbai</option>
+                                <option value="Pune">Pune</option>
+                                <option value="Nagpur">Nagpur</option>
+                                <option value="Nashik">Nashik</option>
+                                <option value="Thane">Thane</option>
+                                <option value="Chhatrapati Sambhajinagar">Chhatrapati Sambhajinagar</option>
+                                <option value="Solapur">Solapur</option>
+                                <option value="Amravati">Amravati</option>
+                                <option value="Kolhapur">Kolhapur</option>
+                                <option value="Navi Mumbai">Navi Mumbai</option>
+                            </select>
                         </div>
-                        <div class="col-md-3">
-                            <label class="form-label" for="doctorLat">Latitude</label>
-                            <input type="text" class="form-control" id="doctorLat" placeholder="Disabled" disabled>
+                        <div class="col-md-4">
+                            <label class="form-label">Consultation Fee Range (INR)</label>
+                            <div class="d-flex">
+                                <input type="number" id="minFee" class="form-control me-2" placeholder="Min" min="0">
+                                <input type="number" id="maxFee" class="form-control" placeholder="Max" min="0">
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label class="form-label" for="doctorLon">Longitude</label>
-                            <input type="text" class="form-control" id="doctorLon" placeholder="Disabled" disabled>
+                        <div class="col-md-2">
+                            <label class="form-label" for="doctorTopN">Results</label>
+                            <input type="number" class="form-control" id="doctorTopN" value="5" min="1" max="20">
                         </div>
                         <div class="col-md-2">
                             <label class="form-label" for="doctorRadius">Radius (km)</label>
@@ -133,7 +148,7 @@
                         <button class="btn btn-primary" id="doctorSearchBtn" onclick="searchDoctors()">
                             <i class="fas fa-search me-2"></i> Search Doctors
                         </button>
-                        <small class="text-muted ms-2">Location is fixed to Nagpur.</small>
+                        <small class="text-muted ms-2">Choose a city and optional fee range.</small>
                     </div>
                     <div class="mt-4" id="doctorResults">
                         <p class="text-muted">Enter location and click search to see nearby doctors.</p>
@@ -314,9 +329,10 @@
 
     async function searchDoctors() {
         const btn = document.getElementById('doctorSearchBtn');
-        const area = 'Nagpur';
-        const latStr = '';
-        const lonStr = '';
+        const city = document.getElementById('doctorCity').value;
+        const minFee = document.getElementById('minFee').value;
+        const maxFee = document.getElementById('maxFee').value;
+        const topN = parseInt(document.getElementById('doctorTopN').value) || 5;
         const radius = parseFloat(document.getElementById('doctorRadius').value) || 20;
 
         const resultsDiv = document.getElementById('doctorResults');
@@ -329,14 +345,18 @@
         btn.disabled = true;
 
         try {
-            let url = `/api/doctors/search?radius_km=${encodeURIComponent(radius)}&area=${encodeURIComponent(area)}`;
+            if (!city) throw new Error('Please select a city');
+
+            let url = `/api/doctors/search?city=${encodeURIComponent(city)}&top_n=${encodeURIComponent(topN)}`;
+            if (minFee) url += `&min_fee=${encodeURIComponent(minFee)}`;
+            if (maxFee) url += `&max_fee=${encodeURIComponent(maxFee)}`;
 
             // Use authenticated call (works for public or protected endpoints)
             const result = await apiCall(url);
             if (!result || !result.success) {
                 throw new Error(result && result.error ? result.error : 'Search failed');
             }
-            renderDoctorResults(result.results, result.radius_km);
+            renderDoctorResults(result.results, radius);
         } catch (err) {
             console.error('Doctor search error:', err);
             resultsDiv.innerHTML = `<div class="alert alert-danger">${err.message || 'Failed to search doctors'}</div>`;
@@ -361,23 +381,23 @@
 
         html += '<div class="list-group">';
         items.forEach((doc) => {
-            const name = doc.name || doc.full_name || (doc.first_name && doc.last_name ? `${doc.first_name} ${doc.last_name}` : 'Unknown');
-            const specialties = doc.specialty || (Array.isArray(doc.specialties) ? doc.specialties.join(', ') : '') || '';
-            const phone = doc.phone || (doc.contact && doc.contact.phone) || '';
-            const addrObj = doc.address || doc.location || {};
-            const address = typeof addrObj === 'string' ? addrObj : [addrObj.street, addrObj.city, addrObj.state, addrObj.zip].filter(Boolean).join(', ');
-            const dist = (doc.distance_km !== undefined) ? `${doc.distance_km} km` : '';
+                const name = doc.doctor_name || 'Unknown';
+                const specialties = doc.specialization || '';
+                const phone = doc.phone || '';
+                const address = [doc.clinic_or_hospital, doc.locality].filter(Boolean).join(', ');
+                const fee = doc.consultation_fee_inr ? `₹${doc.consultation_fee_inr}` : '';
+                const rating = doc.rating ? `⭐ ${doc.rating}` : '';
 
-            html += `
-                <a class="list-group-item list-group-item-action" style="background-color: var(--card-bg); border-color: var(--card-border);">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h6 class="mb-1" style="color: var(--heading-color);">${name}</h6>
-                        <small class="text-muted">${dist}</small>
-                    </div>
-                    <p class="mb-1" style="color: var(--text-color);">${specialties || 'Doctor'}</p>
-                    <small class="text-muted">${address || ''} ${phone ? ' • ' + phone : ''}</small>
-                </a>
-            `;
+                html += `
+                    <a class="list-group-item list-group-item-action" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1" style="color: var(--heading-color);">${name}</h6>
+                            <small class="text-muted">${rating}</small>
+                        </div>
+                        <p class="mb-1" style="color: var(--text-color);">${specialties}</p>
+                        <small class="text-muted">${address || ''} ${phone ? ' • ' + phone : ''} ${fee ? ' • ' + fee : ''}</small>
+                    </a>
+                `;
         });
         html += '</div>';
         resultsDiv.innerHTML = html;

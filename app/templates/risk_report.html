@@ -14,9 +14,14 @@
             <p class="text-muted mb-0" id="reportDate">Loading report...</p>
         </div>
         <div class="col-md-4 text-md-end mt-3 mt-md-0">
-             <button class="btn btn-primary" onclick="generateNewAssessment()">
-                <i class="fas fa-sync-alt me-2"></i> Update Assessment
-            </button>
+            <div class="btn-group" role="group" aria-label="actions">
+                <button class="btn btn-outline-secondary" onclick="downloadPDF()" id="emailReportBtn">
+                    <i class="fas fa-file-download me-2"></i> Download PDF
+                </button>
+                <button class="btn btn-primary" onclick="generateNewAssessment()">
+                    <i class="fas fa-sync-alt me-2"></i> Update Assessment
+                </button>
+            </div>
         </div>
     </div>
 
@@ -460,6 +465,31 @@
         if (!confirm('Generate a new risk assessment? This will analyze all your health data.')) {
             return;
         }
+
+            async function emailReport() {
+                if (!confirm('Send your latest risk report to your registered email?')) return;
+
+                const btn = document.getElementById('emailReportBtn');
+                const orig = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Sending...';
+
+                try {
+                    // This endpoint requires authentication and will email the latest report to the current user
+                    const res = await apiCall('/api/assessment/email', 'POST');
+                    if (res && res.success) {
+                        alert(res.message || 'Report emailed successfully');
+                    } else {
+                        alert(res && res.error ? res.error : 'Failed to email report');
+                    }
+                } catch (err) {
+                    console.error('Email report error:', err);
+                    alert('Failed to email report. Make sure you are signed in and SMTP is configured.');
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                }
+            }
         
         const btn = event.target;
         const originalText = btn.innerHTML;
@@ -480,7 +510,7 @@
 
         try {
             const result = await apiCall('/api/assessment/generate', 'POST');
-            
+
             if (result.success) {
                 alert('Risk assessment generated successfully!');
                 location.reload();
@@ -494,6 +524,69 @@
             if (!isPreview) {
                 btn.disabled = false;
                 btn.innerHTML = originalText;
+            }
+        }
+    }
+
+    async function downloadPDF() {
+        const btn = document.getElementById('emailReportBtn');
+        const orig = btn ? btn.innerHTML : '';
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Preparing...';
+        }
+
+        try {
+            if (isPreview) {
+                // Simple client-side PDF generation (text-only) using a blob
+                const report = currentReport || previewData;
+                const lines = [];
+                const date = report.report_date ? new Date(report.report_date).toLocaleDateString() : '';
+                lines.push('MedWhisper - Health Risk Report');
+                lines.push(`Report Date: ${date}`);
+                lines.push('');
+                lines.push('Overall Score: ' + (report.overall_risk_score || '')); 
+                lines.push('');
+                lines.push('Risk Breakdown:');
+                const ra = report.risk_assessments || {};
+                for (const k of Object.keys(ra)) {
+                    const v = ra[k];
+                    lines.push(`${k.replace(/_/g, ' ')}: ${v.risk_score}% (${v.risk_level})`);
+                }
+                lines.push('');
+                lines.push('Priority Actions:');
+                (report.priority_actions || []).forEach(p => lines.push(`${p.urgency.toUpperCase()}: ${p.action}`));
+
+                // Create a very simple PDF using the browser's print-to-PDF fallback: open in new window and prompt print
+                const w = window.open('', '_blank');
+                const pre = `<pre style="font-family: monospace; white-space: pre-wrap;">${lines.join('\n')}</pre>`;
+                w.document.write(`<html><head><title>MedWhisper Report</title></head><body>${pre}</body></html>`);
+                w.document.close();
+                w.focus();
+                // Give the window a moment then call print
+                setTimeout(() => { w.print(); }, 300);
+                return;
+            }
+
+            // Non-preview: request PDF from server
+            const resp = await fetch('/api/assessment/pdf', { method: 'GET', headers: { 'Accept': 'application/pdf' } });
+            if (!resp.ok) throw new Error('Failed to generate PDF');
+            const blob = await resp.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'medwhisper_risk_report.pdf';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error('Download PDF error:', err);
+            alert('Failed to download PDF. Make sure you are signed in.');
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = orig;
             }
         }
     }

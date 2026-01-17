@@ -9,9 +9,13 @@ from app.utils.preprocess import (
     validate_lab_data, validate_lifestyle_data,
     validate_mental_health_data, sanitize_input
 )
+from app.services.doctor_suggester import suggest_by_city
+from app.services.emailer import send_email
+import io
+from flask import send_file
+from reportlab.pdfgen import canvas
 import logging
-import requests
-import math
+ 
 
 logger = logging.getLogger(__name__)
 
@@ -558,128 +562,195 @@ def chat_with_gemini():
         return jsonify({'error': 'Failed to get response from Gemini. Please try again later.'}), 500
 
 
-# ========== Doctors Search (External API Integration) ==========
-
-def _haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
-    R = 6371.0
-    phi1 = math.radians(lat1)
-    phi2 = math.radians(lat2)
-    dphi = math.radians(lat2 - lat1)
-    dlambda = math.radians(lon2 - lon1)
-    a = math.sin(dphi/2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda/2) ** 2
-    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-    return R * c
-
-
-def _extract_coords(doctor: dict):
-    # try common patterns for coordinates
-    for lat_key, lon_key in (("lat", "lon"), ("lat", "lng"), ("latitude", "longitude")):
-        if lat_key in doctor and lon_key in doctor:
-            try:
-                return float(doctor[lat_key]), float(doctor[lon_key])
-            except Exception:
-                pass
-    for loc_key in ("location", "geo", "address", "coordinates"):
-        loc = doctor.get(loc_key)
-        if isinstance(loc, dict):
-            for lat_key, lon_key in (("lat", "lon"), ("lat", "lng"), ("latitude", "longitude")):
-                if lat_key in loc and lon_key in loc:
-                    try:
-                        return float(loc[lat_key]), float(loc[lon_key])
-                    except Exception:
-                        pass
-    return None
-
-
-def _geocode_area(area_query: str):
-    try:
-        url = "https://nominatim.openstreetmap.org/search"
-        params = {"q": area_query, "format": "json", "limit": 1}
-        headers = {"User-Agent": "MedWhisper/1.0"}
-        resp = requests.get(url, params=params, headers=headers, timeout=10)
-        resp.raise_for_status()
-        results = resp.json()
-        if results:
-            return float(results[0]["lat"]), float(results[0]["lon"])  # type: ignore[index]
-    except Exception as e:
-        logger.error(f"Geocoding failed: {e}")
-    return None
+# ========== Doctors Search (Local CSV-based Recommendations) ==========
 
 
 @api_bp.route('/doctors/search', methods=['GET'])
 def search_doctors():
-    """Search doctors near an area or coordinates within a radius.
+    """Search doctors by `city` using the local CSV dataset.
 
     Query params:
-      - area: Optional free-text location (city, address, postal code)
-      - lat: Optional latitude
-      - lon: Optional longitude
-      - radius_km: Optional radius in kilometers (default: 20)
+      - city: required city name (case-insensitive)
+      - top_n: optional number of results (default: 5)
     """
     try:
-        # Hardcode location as Nagpur
-        area = 'Nagpur'
-        # Use static coordinates to avoid geocoding dependency
-        # Nagpur approx coordinates
-        lat = 21.1458
-        lon = 79.0882
-        radius_km = request.args.get('radius_km', default=20.0, type=float)
+        city = request.args.get('city', '').strip()
+        if not city:
+            return jsonify({'error': 'Query parameter `city` is required'}), 400
 
-        base_url = current_app.config.get('DOCTORS_API_BASE_URL', 'https://doctorsapi.com/api')
-        api_key = current_app.config.get('DOCTORS_API_KEY')
-        if not api_key:
-            return jsonify({'error': 'Missing DOCTORS_API_KEY in environment'}), 500
+        top_n = request.args.get('top_n', default=5, type=int)
+        min_fee = request.args.get('min_fee', default=None, type=int)
+        max_fee = request.args.get('max_fee', default=None, type=int)
 
-        # lat/lon already set to static coordinates for Nagpur
-
-        # Try remote filtering if supported
-        headers = {"api-key": api_key}
-        params = {"lat": lat, "lon": lon, "radius_km": radius_km}
-        doctors: list = []
-        try:
-            resp = requests.get(f"{base_url}/doctors", headers=headers, params=params, timeout=10)
-            resp.raise_for_status()
-            data = resp.json()
-            if isinstance(data, list):
-                doctors = data
-            elif isinstance(data, dict):
-                for key in ("data", "results", "items", "doctors"):
-                    if key in data and isinstance(data[key], list):
-                        doctors = data[key]
-                        break
-        except Exception as e:
-            logger.warning(f"Remote filter failed or unsupported, falling back to local: {e}")
-
-        # Fallback: fetch and locally filter by distance
-        if not doctors:
-            try:
-                resp_all = requests.get(f"{base_url}/doctors", headers=headers, timeout=10)
-                resp_all.raise_for_status()
-                all_data = resp_all.json()
-                doctors = all_data if isinstance(all_data, list) else all_data.get('data', [])
-            except Exception as e:
-                logger.error(f"Fetching doctors failed: {e}")
-                return jsonify({'error': 'Failed to fetch doctors'}), 502
-
-            filtered = []
-            for doc in doctors:
-                coords = _extract_coords(doc)
-                if not coords:
-                    continue
-                d_km = _haversine_km(lat, lon, coords[0], coords[1])
-                if d_km <= radius_km:
-                    item = dict(doc)
-                    item['distance_km'] = round(d_km, 2)
-                    filtered.append(item)
-            doctors = sorted(filtered, key=lambda d: d.get('distance_km', radius_km))
+        results = suggest_by_city(city=city, top_n=top_n, min_fee=min_fee, max_fee=max_fee)
 
         return jsonify({
             'success': True,
-            'count': len(doctors),
-            'radius_km': radius_km,
-            'area': area,
-            'results': doctors
+            'city': city,
+            'count': len(results),
+            'results': results
         })
     except Exception as e:
         logger.error(f"Error searching doctors: {e}")
         return jsonify({'error': 'Failed to search doctors'}), 500
+
+
+@api_bp.route('/assessment/email', methods=['POST'])
+@require_auth
+def email_latest_assessment(current_user):
+    """Send the user's latest risk assessment to their registered email via SMTP.
+
+    Requires SMTP config in `current_app.config` (MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD).
+    """
+    try:
+        pipeline = HealthDataPipeline()
+        report = pipeline.get_latest_risk_report(current_user['uid'])
+
+        if not report:
+            return jsonify({'error': 'No risk assessment found to email'}), 404
+
+        # Build a simple HTML summary
+        html = []
+        html.append(f"<h2>Health Risk Report - {report.get('report_date', '')}</h2>")
+        overall = report.get('overall_risk_score') or report.get('overall_score') or ''
+        if overall:
+            html.append(f"<p><strong>Overall Risk Score:</strong> {overall}%</p>")
+
+        html.append('<h3>Risk Breakdown</h3>')
+        html.append('<ul>')
+        for k, v in (report.get('risk_assessments') or {}).items():
+            name = k.replace('_', ' ').title()
+            score = v.get('risk_score', '')
+            level = v.get('risk_level', '')
+            html.append(f"<li><strong>{name}:</strong> {score}% ({level})</li>")
+        html.append('</ul>')
+
+        priority = report.get('priority_actions') or []
+        if priority:
+            html.append('<h3>Priority Actions</h3>')
+            html.append('<ul>')
+            for p in priority:
+                html.append(f"<li>{p.get('action')} - <em>{p.get('urgency')}</em></li>")
+            html.append('</ul>')
+
+        detailed = report.get('detailed_recommendations') or {}
+        if detailed:
+            html.append('<h3>Detailed Recommendations</h3>')
+            for section, items in detailed.items():
+                html.append(f"<h4>{section.title()}</h4>")
+                html.append('<ul>')
+                for it in items:
+                    html.append(f"<li>{it}</li>")
+                html.append('</ul>')
+
+        html_body = '\n'.join(html)
+
+        to_email = current_user.get('email')
+        if not to_email:
+            return jsonify({'error': 'User email not available'}), 400
+
+        subject = 'Your MedWhisper Health Risk Report'
+        sent = send_email(subject=subject, html_body=html_body, to_email=to_email)
+
+        if sent:
+            return jsonify({'success': True, 'message': f'Report emailed to {to_email}'})
+        else:
+            return jsonify({'error': 'Failed to send email. Check SMTP configuration.'}), 500
+
+    except Exception as e:
+        logger.error(f"Error emailing assessment: {e}")
+        return jsonify({'error': 'Failed to email assessment'}), 500
+
+
+@api_bp.route('/assessment/pdf', methods=['GET'])
+@require_auth
+def download_latest_assessment_pdf(current_user):
+    """Generate and return the latest risk assessment as a PDF attachment."""
+    try:
+        pipeline = HealthDataPipeline()
+        report = pipeline.get_latest_risk_report(current_user['uid'])
+
+        if not report:
+            return jsonify({'error': 'No risk assessment found'}), 404
+
+        buffer = io.BytesIO()
+        p = canvas.Canvas(buffer)
+
+        # Simple PDF layout
+        title = 'MedWhisper - Health Risk Report'
+        p.setFont('Helvetica-Bold', 16)
+        p.drawString(72, 800, title)
+
+        p.setFont('Helvetica', 11)
+        date = report.get('report_date', '')
+        p.drawString(72, 780, f'Report Date: {date}')
+
+        y = 750
+        p.setFont('Helvetica-Bold', 12)
+        p.drawString(72, y, 'Overall Score:')
+        p.setFont('Helvetica', 12)
+        overall = report.get('overall_risk_score') or report.get('overall_score') or ''
+        p.drawString(170, y, f'{overall}%')
+        y -= 30
+
+        p.setFont('Helvetica-Bold', 12)
+        p.drawString(72, y, 'Risk Breakdown:')
+        y -= 18
+        p.setFont('Helvetica', 10)
+        for k, v in (report.get('risk_assessments') or {}).items():
+            if y < 80:
+                p.showPage()
+                y = 800
+            name = k.replace('_', ' ').title()
+            score = v.get('risk_score', '')
+            level = v.get('risk_level', '')
+            p.drawString(80, y, f'- {name}: {score}% ({level})')
+            y -= 14
+
+        y -= 6
+        p.setFont('Helvetica-Bold', 12)
+        p.drawString(72, y, 'Priority Actions:')
+        y -= 18
+        p.setFont('Helvetica', 10)
+        for pitem in (report.get('priority_actions') or []):
+            if y < 80:
+                p.showPage()
+                y = 800
+            p.drawString(80, y, f"- {pitem.get('urgency','').upper()}: {pitem.get('action','')}")
+            y -= 14
+
+        p.showPage()
+        p.save()
+        buffer.seek(0)
+
+        return send_file(buffer, as_attachment=True, download_name='medwhisper_risk_report.pdf', mimetype='application/pdf')
+    except Exception as e:
+        logger.error(f'Error generating PDF: {e}')
+        return jsonify({'error': 'Failed to generate PDF'}), 500
+
+
+@api_bp.route('/doctors/suggest', methods=['GET'])
+def suggest_doctors_by_city():
+    """Suggest doctors from local CSV when user provides a `city` query param.
+
+    Query params:
+      - city: required city name (case-insensitive)
+      - top_n: optional number of results (default 5)
+    """
+    try:
+        city = request.args.get('city', '').strip()
+        if not city:
+            return jsonify({'error': 'Query parameter `city` is required'}), 400
+
+        top_n = request.args.get('top_n', default=5, type=int)
+        results = suggest_by_city(city=city, top_n=top_n)
+
+        return jsonify({
+            'success': True,
+            'city': city,
+            'count': len(results),
+            'results': results
+        })
+    except Exception as e:
+        logger.error(f"Error suggesting doctors by city: {e}")
+        return jsonify({'error': 'Failed to suggest doctors'}), 500
