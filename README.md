@@ -327,7 +327,7 @@ This project is licensed under the MIT License.
 
 ## 👥 Team
 
-GFGBQ Team - jumpyrock
+GDG_KRAKENTECH
 
 ## 📞 Support
 
