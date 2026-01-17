@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block title %}Future Disease Prediction - MedWhisper{% endblock %}
+
+{% block extra_css %}
+<style>
+  .fdp-card { max-width: 980px; margin: 40px auto; }
+  .fdp-grid .form-label { font-weight: 600; }
+  .result-card { background: var(--card-bg); color: var(--text-color); }
+  .high { color: #ef4444; }
+  .moderate { color: #facc15; }
+  .low { color: #22c55e; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container fdp-card">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h2 class="card-title">Future Disease Prediction</h2>
+      <p class="text-muted">Enter health parameters to estimate risk levels.</p>
+
+      <form class="row g-3 fdp-grid" onsubmit="event.preventDefault(); predict();">
+        <div class="col-12 col-md-6">
+          <label for="age" class="form-label">Age</label>
+          <input id="age" class="form-control" type="number" value="18" min="0">
+        </div>
+        <div class="col-12 col-md-6">
+          <label for="bmi" class="form-label">BMI</label>
+          <input id="bmi" class="form-control" type="number" value="18" step="0.1">
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label for="fasting_glucose" class="form-label">Fasting Glucose (mg/dL)</label>
+          <input id="fasting_glucose" class="form-control" type="number" value="90">
+        </div>
+        <div class="col-12 col-md-6">
+          <label for="hba1c" class="form-label">HbA1c (%)</label>
+          <input id="hba1c" class="form-control" type="number" value="5" step="0.1">
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label for="systolic_bp" class="form-label">Systolic BP</label>
+          <input id="systolic_bp" class="form-control" type="number" value="120">
+        </div>
+        <div class="col-12 col-md-6">
+          <label for="diastolic_bp" class="form-label">Diastolic BP</label>
+          <input id="diastolic_bp" class="form-control" type="number" value="80">
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label for="hemoglobin" class="form-label">Hemoglobin (g/dL)</label>
+          <input id="hemoglobin" class="form-control" type="number" value="13" step="0.1">
+        </div>
+        <div class="col-12 col-md-6">
+          <label for="creatinine" class="form-label">Creatinine (mg/dL)</label>
+          <input id="creatinine" class="form-control" type="number" value="0.9" step="0.01">
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label for="hdl" class="form-label">HDL (mg/dL)</label>
+          <input id="hdl" class="form-control" type="number" value="50">
+        </div>
+        <div class="col-12 col-md-6">
+          <label for="sex" class="form-label">Sex</label>
+          <select id="sex" class="form-select">
+            <option value="1">Male</option>
+            <option value="0">Female</option>
+          </select>
+        </div>
+
+        <div class="col-12 d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Predict Risks</button>
+          <button type="button" id="resetBtn" class="btn btn-outline-secondary">Reset</button>
+        </div>
+      </form>
+
+      <div id="output" class="card mt-4 result-card p-3">
+        <em>No prediction yet.</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Utility helpers
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const norm = (v, min, max) => {
+    if (max <= min) return 0;
+    return clamp((v - min) / (max - min), 0, 1);
+  };
+
+  function riskLabelFromProb(p) {
+    if (p >= 0.7) return 'High Risk';
+    if (p >= 0.4) return 'Moderate Risk';
+    return 'Low Risk';
+  }
+
+  function progressClass(p) {
+    if (p >= 0.7) return 'bg-danger';
+    if (p >= 0.4) return 'bg-warning';
+    return 'bg-success';
+  }
+
+  function predict() {
+    const get = id => document.getElementById(id);
+    const age = Number(get('age').value || 0);
+    const bmi = Number(get('bmi').value || 0);
+    const fg = Number(get('fasting_glucose').value || 0);
+    const hba1c = Number(get('hba1c').value || 0);
+    const sbp = Number(get('systolic_bp').value || 0);
+    const dbp = Number(get('diastolic_bp').value || 0);
+    const hb = Number(get('hemoglobin').value || 0);
+    const cr = Number(get('creatinine').value || 0);
+    const hdl = Number(get('hdl').value || 0);
+    const sex = Number(get('sex').value);
+
+    // Diabetes: use HbA1c and fasting glucose (strong), BMI minor
+    const fg_n = norm(fg, 70, 200);
+    const hba_n = norm(hba1c, 4, 14);
+    const bmi_n = norm(bmi, 15, 50);
+    const diabetes_prob = clamp(0.6 * hba_n + 0.3 * fg_n + 0.1 * bmi_n, 0, 1);
+
+    // Hypertension: systolic/diastolic dominate, age and BMI add
+    const sbp_n = norm(sbp, 90, 210);
+    const dbp_n = norm(dbp, 50, 130);
+    const age_n = norm(age, 20, 90);
+    const hypertension_prob = clamp(0.6 * Math.max(sbp_n, dbp_n) + 0.2 * age_n + 0.2 * bmi_n, 0, 1);
+
+    // Anemia: lower hemoglobin increases risk, threshold depends on sex
+    const hb_threshold = sex === 1 ? 13 : 12;
+    const anemia_prob = clamp((hb_threshold - hb) / hb_threshold, 0, 1);
+
+    // Kidney: creatinine plus age
+    const cr_n = norm(cr, 0.5, 6);
+    const kidney_prob = clamp(0.7 * cr_n + 0.3 * age_n, 0, 1);
+
+    // Cardiovascular: combine risk features into a continuous score
+    let cardio_score = 0;
+    cardio_score += age > 50 ? 1 : 0;
+    cardio_score += bmi >= 30 ? 1 : 0;
+    cardio_score += hdl < 40 ? 1 : 0;
+    cardio_score += sbp >= 140 ? 1 : 0;
+    cardio_score += fg >= 126 ? 1 : 0;
+    // Map 0-5 score to probability
+    const cardio_prob = clamp((cardio_score / 5) * 0.9 + 0.05, 0, 1);
+
+    const results = {
+      'Diabetes': diabetes_prob,
+      'Hypertension': hypertension_prob,
+      'Anemia': anemia_prob,
+      'Kidney Disease': kidney_prob,
+      'Cardiovascular Disease': cardio_prob
+    };
+
+    const output = get('output');
+    let html = '<h5>Prediction Results</h5>';
+    html += '<div class="list-group list-group-flush">';
+
+    for (const k in results) {
+      const p = results[k];
+      const pct = Math.round(p * 100);
+      const label = riskLabelFromProb(p);
+      const barClass = progressClass(p);
+
+      html += `
+        <div class="list-group-item py-2">
+          <div class="d-flex justify-content-between"><div><strong>${k}</strong></div><div><span class="${p>=0? (p>=0.7? 'high': (p>=0.4? 'moderate':'low')):''}">${label}</span> <small class="text-muted">${pct}%</small></div></div>
+          <div class="progress mt-2" style="height:10px;">
+            <div class="progress-bar ${barClass}" role="progressbar" style="width: ${pct}%;" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>`;
+    }
+
+    html += '</div>';
+    output.innerHTML = html;
+  }
+
+  // Live sensitivity: update as inputs change
+  document.querySelectorAll('#age,#bmi,#fasting_glucose,#hba1c,#systolic_bp,#diastolic_bp,#hemoglobin,#creatinine,#hdl,#sex').forEach(el => {
+    el.addEventListener('input', predict);
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', function() {
+    document.querySelector('form').reset();
+    document.getElementById('output').innerHTML = '<em>No prediction yet.</em>';
+  });
+
+  // Run an initial prediction
+  predict();
+</script>
+{% endblock %}

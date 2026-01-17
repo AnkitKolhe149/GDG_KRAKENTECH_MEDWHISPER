@@ -11,6 +11,11 @@ from app.utils.preprocess import (
 )
 from app.services.doctor_suggester import suggest_by_city
 from app.services.emailer import send_email
+from app.services.risk_prob_predictor import (
+    predict_risks,
+    MODEL_NUMERIC_COLS,
+    MODEL_CATEGORICAL_COLS
+)
 import io
 from flask import send_file
 from reportlab.pdfgen import canvas
@@ -44,6 +49,52 @@ def dashboard():
 def data_input():
     """Health data input form"""
     return render_template('data_input.html')
+
+
+@main_bp.route('/future-disease-prediction', methods=['GET', 'POST'])
+def future_disease_prediction():
+    """Render and handle the future disease prediction page (server-side POST, no API)."""
+    # Compact feature set for the simplified UX
+    compact_numeric = [
+        'age', 'bmi', 'fasting_glucose', 'hba1c', 'systolic_bp',
+        'diastolic_bp', 'hemoglobin', 'creatinine', 'hdl'
+    ]
+    compact_categorical = ['sex']
+
+    predictions = None
+    input_values = {}
+    error = None
+
+    if request.method == 'POST':
+        try:
+            # Collect values from form
+            for c in compact_numeric:
+                v = request.form.get(c, '').strip()
+                if v == '':
+                    input_values[c] = None
+                else:
+                    try:
+                        input_values[c] = float(v)
+                    except Exception:
+                        input_values[c] = None
+
+            for c in compact_categorical:
+                v = request.form.get(c, '').strip()
+                input_values[c] = v or None
+
+            # Call predictor service
+            predictions = predict_risks(input_values)
+        except Exception as e:
+            error = str(e)
+
+    return render_template(
+        'future-disease-prediction.html',
+        numeric_cols=compact_numeric,
+        categorical_cols=compact_categorical,
+        predictions=predictions,
+        input_values=input_values,
+        error=error
+    )
 
 
 @main_bp.route('/risk-report')
@@ -614,6 +665,9 @@ def search_doctors():
     except Exception as e:
         logger.error(f"Error searching doctors: {e}")
         return jsonify({'error': 'Failed to search doctors'}), 500
+
+
+
 
 
 @api_bp.route('/assessment/email', methods=['POST'])
