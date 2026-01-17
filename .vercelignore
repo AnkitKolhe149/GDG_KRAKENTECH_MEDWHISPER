@@ -1,0 +1,14 @@
+# Ignore large files and runtime artifacts from Vercel deployments
+models_store/
+models_store/**
+data/
+data/**
+logs/
+logs/**
+*.zip
+*.tar.gz
+*.tar
+__pycache__/
+*.pyc
+firebase-credentials.json
+.env
