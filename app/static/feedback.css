@@ -2,6 +2,107 @@
    FEEDBACK PAGE STYLES - ENHANCED 3D
    =============================== */
 
+.feedback-header-badge {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #2563eb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+    animation: pulse 2s infinite;
+}
+
+.feedback-header-badge i {
+    color: white;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 12px 48px rgba(59, 130, 246, 0.6);
+    }
+}
+
+/* ===============================
+   STATS BOX
+   =============================== */
+
+.stat-box {
+    background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
+    border: 1.5px solid rgba(59, 130, 246, 0.15);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+[data-theme="dark"] .stat-box {
+    background: linear-gradient(135deg, rgba(26, 40, 71, 0.8) 0%, rgba(20, 27, 47, 0.6) 100%);
+    border-color: rgba(100, 150, 255, 0.2);
+}
+
+.stat-box:hover {
+    transform: translateY(-5px);
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.2);
+}
+
+/* ===============================
+   IMPORTANCE CARD
+   =============================== */
+
+.importance-card {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(16, 185, 129, 0.06) 100%);
+    border: 1.5px solid rgba(59, 130, 246, 0.2);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .importance-card {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(16, 185, 129, 0.08) 100%);
+    border-color: rgba(100, 150, 255, 0.25);
+}
+
+.impact-item {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+.impact-item i {
+    font-size: 1.1rem;
+}
+
+/* ===============================
+   FORM CONTROLS
+   =============================== */
+
 .feedback-card {
     background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
     border: 1.5px solid rgba(59, 130, 246, 0.15);

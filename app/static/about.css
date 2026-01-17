@@ -123,13 +123,14 @@
     background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
     border: 1.5px solid rgba(59, 130, 246, 0.12);
     border-radius: 1.5rem;
-    padding: 2.5rem 2rem;
+    padding: 2rem;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     height: 100%;
     position: relative;
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255,255,255,0.6);
     backdrop-filter: blur(12px);
+    text-align: center;
 }
 
 .reason-card::before {
@@ -168,8 +169,18 @@
 }
 
 .reason-card:hover .reason-icon {
-    transform: scale(1.2) rotateZ(5deg);
+    transform: scale(1.15) rotateY(10deg);
     filter: drop-shadow(0 8px 16px rgba(59, 130, 246, 0.25));
+}
+
+.reason-card h5 {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.reason-card p {
+    font-size: 0.9rem;
+    line-height: 1.6;
 }
 
 /* ===============================
@@ -285,6 +296,78 @@
 
 .btn-primary:active {
     transform: translateY(-1px);
+}
+
+/* ===============================
+   STEP NUMBERS
+   =============================== */
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #2563eb 100%);
+    color: white;
+    font-size: 1.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+    transition: all 0.4s ease;
+}
+
+.step-number:hover {
+    transform: scale(1.1) rotateY(10deg);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+}
+
+/* ===============================
+   TECH BADGES
+   =============================== */
+
+.tech-badge {
+    background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
+    border: 1.5px solid rgba(59, 130, 246, 0.15);
+    border-radius: 1rem;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.tech-badge i {
+    font-size: 2rem;
+    color: var(--primary-color);
+    transition: all 0.4s ease;
+}
+
+.tech-badge p {
+    color: var(--text-color);
+    font-weight: 600;
+    margin: 0;
+}
+
+[data-theme="dark"] .tech-badge {
+    background: linear-gradient(135deg, rgba(26, 40, 71, 0.8) 0%, rgba(20, 27, 47, 0.6) 100%);
+    border-color: rgba(100, 150, 255, 0.2);
+}
+
+.tech-badge:hover {
+    transform: translateY(-8px);
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.2);
+}
+
+.tech-badge:hover i {
+    transform: scale(1.2);
+    color: #2563eb;
+}
+
+[data-theme="dark"] .tech-badge:hover {
+    border-color: rgba(100, 150, 255, 0.4);
 }
 
 /* ===============================
