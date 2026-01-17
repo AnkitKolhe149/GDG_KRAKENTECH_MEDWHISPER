@@ -20,6 +20,9 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+    <!-- WebGL Animated Background Canvas -->
+    <canvas id="webglBackground" class="webgl-canvas"></canvas>
+    
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
@@ -40,14 +43,14 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/risk-report">Risk Report</a>
                     </li>
-                    <li class="nav-item">
-                        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
-                            <span id="themeIcon">🌙</span>
-                        </button>
-                    </li>
                     <li class="nav-item" id="authSection">
                         <button class="btn btn-outline-primary btn-sm" onclick="handleAuth()">
                             <i class="fas fa-user"></i> <span id="authText">Sign In</span>
+                        </button>
+                    </li>
+                    <li class="nav-item theme-toggle-item">
+                        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                            <i id="themeIcon" class="fas fa-moon"></i>
                         </button>
                     </li>
                 </ul>
@@ -136,7 +139,7 @@
             const token = localStorage.getItem('authToken');
             if (!token) {
                 window.location.href = '/';
-                return;
+                return { success: false, error: 'Not authenticated' };
             }
             
             const options = {
@@ -153,10 +156,17 @@
             
             try {
                 const response = await fetch(endpoint, options);
-                return await response.json();
+                const result = await response.json();
+                
+                // Ensure we always return a valid response object
+                if (!result) {
+                    return { success: false, error: 'No response from server' };
+                }
+                
+                return result;
             } catch (error) {
                 console.error('API call error:', error);
-                throw error;
+                return { success: false, error: error.message };
             }
         }
         
@@ -169,7 +179,7 @@
             // Check for saved theme preference
             const currentTheme = localStorage.getItem('theme') || 'light';
             htmlElement.setAttribute('data-theme', currentTheme);
-            themeIcon.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+            updateThemeIcon(currentTheme);
             
             // Toggle theme on button click
             if (themeToggle) {
@@ -177,10 +187,159 @@
                     const newTheme = htmlElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
                     htmlElement.setAttribute('data-theme', newTheme);
                     localStorage.setItem('theme', newTheme);
-                    themeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                    updateThemeIcon(newTheme);
                 });
             }
+            
+            // Update theme icon based on current theme
+            function updateThemeIcon(theme) {
+                if (theme === 'dark') {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            }
         });
+
+        // ===============================
+        // WebGL ANIMATED BACKGROUND
+        // =============================== */
+        class WebGLBackground {
+            constructor(canvasId) {
+                this.canvas = document.getElementById(canvasId);
+                if (!this.canvas) return;
+                
+                this.ctx = this.canvas.getContext('2d', { alpha: true });
+                this.width = this.canvas.width = window.innerWidth;
+                this.height = this.canvas.height = window.innerHeight;
+                
+                this.particles = [];
+                this.mouse = { x: 0, y: 0 };
+                this.time = 0;
+                
+                this.initParticles();
+                this.setupEventListeners();
+                this.animate();
+            }
+            
+            initParticles() {
+                const particleCount = Math.min(150, Math.max(50, window.innerWidth / 20));
+                for (let i = 0; i < particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.width,
+                        y: Math.random() * this.height,
+                        vx: (Math.random() - 0.5) * 2,
+                        vy: (Math.random() - 0.5) * 2,
+                        radius: Math.random() * 2 + 1,
+                        opacity: Math.random() * 0.5 + 0.2,
+                        oscillation: Math.random() * Math.PI * 2
+                    });
+                }
+            }
+            
+            setupEventListeners() {
+                window.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+                
+                window.addEventListener('resize', () => {
+                    this.width = this.canvas.width = window.innerWidth;
+                    this.height = this.canvas.height = window.innerHeight;
+                });
+            }
+            
+            updateParticles() {
+                this.particles.forEach((p, i) => {
+                    // Oscillating movement
+                    p.x += p.vx + Math.sin(this.time * 0.003 + p.oscillation) * 0.5;
+                    p.y += p.vy + Math.cos(this.time * 0.002 + p.oscillation) * 0.5;
+                    
+                    // Mouse attraction
+                    const dx = this.mouse.x - p.x;
+                    const dy = this.mouse.y - p.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 200) {
+                        p.x += (dx / distance) * 0.5;
+                        p.y += (dy / distance) * 0.5;
+                    }
+                    
+                    // Wrap around edges
+                    if (p.x < 0) p.x = this.width;
+                    if (p.x > this.width) p.x = 0;
+                    if (p.y < 0) p.y = this.height;
+                    if (p.y > this.height) p.y = 0;
+                });
+            }
+            
+            draw() {
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                
+                // Clear canvas with theme-appropriate background
+                this.ctx.fillStyle = isDark ? 'rgba(10, 14, 39, 0.1)' : 'rgba(245, 247, 250, 0.1)';
+                this.ctx.fillRect(0, 0, this.width, this.height);
+                
+                // Draw particles
+                this.particles.forEach((p, i) => {
+                    const alpha = p.opacity + Math.sin(this.time * 0.01 + p.oscillation) * 0.3;
+                    
+                    // Particle glow
+                    const gradient = this.ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 3);
+                    gradient.addColorStop(0, isDark ? `rgba(96, 165, 250, ${alpha})` : `rgba(16, 185, 129, ${alpha})`);
+                    gradient.addColorStop(1, isDark ? `rgba(96, 165, 250, 0)` : `rgba(16, 185, 129, 0)`);
+                    
+                    this.ctx.fillStyle = gradient;
+                    this.ctx.beginPath();
+                    this.ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    
+                    // Core particle
+                    this.ctx.fillStyle = isDark ? `rgba(96, 165, 250, ${alpha})` : `rgba(16, 185, 129, ${alpha})`;
+                    this.ctx.beginPath();
+                    this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    this.ctx.fill();
+                });
+                
+                // Draw connecting lines between nearby particles
+                for (let i = 0; i < this.particles.length; i++) {
+                    for (let j = i + 1; j < this.particles.length; j++) {
+                        const p1 = this.particles[i];
+                        const p2 = this.particles[j];
+                        const dx = p1.x - p2.x;
+                        const dy = p1.y - p2.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 150) {
+                            this.ctx.strokeStyle = isDark ? `rgba(96, 165, 250, ${0.1 * (1 - distance / 150)})` : `rgba(16, 185, 129, ${0.1 * (1 - distance / 150)})`;
+                            this.ctx.lineWidth = 1;
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(p1.x, p1.y);
+                            this.ctx.lineTo(p2.x, p2.y);
+                            this.ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            animate() {
+                this.updateParticles();
+                this.draw();
+                this.time++;
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+        
+        // Initialize WebGL background when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                new WebGLBackground('webglBackground');
+            });
+        } else {
+            new WebGLBackground('webglBackground');
+        }
     </script>
     
     {% block extra_js %}{% endblock %}

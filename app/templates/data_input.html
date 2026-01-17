@@ -358,6 +358,37 @@
         await submitForm(e.target, '/api/data/mental-health', 'Mental health data');
     });
 
+    // Family History Checkbox Selection Handler
+    document.addEventListener('DOMContentLoaded', function() {
+        const familyHistoryCheckboxes = document.querySelectorAll('#familyHistoryForm .form-check-input');
+        
+        familyHistoryCheckboxes.forEach(checkbox => {
+            const formCheck = checkbox.closest('.form-check');
+            
+            // Set initial state
+            if (checkbox.checked) {
+                formCheck.classList.add('checked');
+            }
+            
+            // Handle change events
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    formCheck.classList.add('checked');
+                } else {
+                    formCheck.classList.remove('checked');
+                }
+            });
+            
+            // Handle click on the form-check container
+            formCheck.addEventListener('click', function(e) {
+                if (e.target !== checkbox && !e.target.closest('input')) {
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
+        });
+    });
+
     document.getElementById('familyHistoryForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -372,13 +403,17 @@
         try {
             const result = await apiCall('/api/data/family-history', 'POST', data);
             if (result.success) {
-                alert('Family history saved successfully!');
+                showNotification('Family History Saved', 'Your family history has been saved successfully!', 'success');
                 e.target.reset();
+                // Remove checked class from all checkboxes
+                document.querySelectorAll('#familyHistoryForm .form-check').forEach(fc => {
+                    fc.classList.remove('checked');
+                });
             } else {
-                alert(result.error || 'Failed to save data');
+                showNotification('Failed to Save', result.error || 'Failed to save family history', 'danger');
             }
         } catch (error) {
-            alert('Failed to save data');
+            showNotification('Error', 'Failed to save family history. Please try again.', 'danger');
         }
     });
 
@@ -417,29 +452,79 @@
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
         
         try {
+            console.log('Submitting form to:', endpoint); // Debug
             const result = await apiCall(endpoint, 'POST', data);
-            if (result.success) {
-                showValidationMessage(`${dataType} saved successfully!`, 'success');
+            console.log('API response:', result); // Debug
+            
+            if (result && result.success) {
+                showNotification('✓ Success', `${dataType} saved successfully!`, 'success');
                 form.reset();
                 setTimeout(() => {
-                    document.getElementById('dataValidationMessage').style.display = 'none';
-                }, 3000);
+                    form.reset();
+                    // Scroll to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 500);
             } else {
-                showValidationMessage(result.error || `Failed to save ${dataType}`, 'danger');
+                showNotification('✕ Failed to Save', result?.error || `Failed to save ${dataType}`, 'danger');
             }
         } catch (error) {
             console.error('Error submitting form:', error);
-            showValidationMessage(`Failed to save ${dataType}. Please try again.`, 'danger');
+            showNotification('✕ Error', `Failed to save ${dataType}. Please try again.`, 'danger');
         } finally {
             btn.disabled = false;
             btn.innerHTML = originalText;
         }
     }
     
+    // Premium Notification System
+    function showNotification(title, message, type = 'info') {
+        // Always append to body for proper positioning
+        const notification = document.createElement('div');
+        notification.className = `notification-toast ${type}`;
+        
+        // Set icons based on type
+        let icon = 'ℹ️';
+        if (type === 'success') icon = '✓';
+        if (type === 'danger') icon = '✕';
+        if (type === 'warning') icon = '⚠';
+        
+        notification.innerHTML = `
+            <span class="notification-icon">${icon}</span>
+            <div class="notification-content">
+                <div class="notification-title">${title}</div>
+                <div class="notification-message">${message}</div>
+            </div>
+            <button class="notification-close" aria-label="Close">×</button>
+        `;
+        
+        // Append directly to body
+        document.body.appendChild(notification);
+        
+        console.log('Notification shown:', title, message, type); // Debug log
+        
+        // Close button handler
+        notification.querySelector('.notification-close').addEventListener('click', () => {
+            notification.style.animation = 'slideOutRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+            setTimeout(() => notification.remove(), 300);
+        });
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.style.animation = 'slideOutRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+                setTimeout(() => notification.remove(), 300);
+            }
+        }, 5000);
+    }
+    
     function showValidationMessage(message, type) {
-        const msgDiv = document.getElementById('dataValidationMessage');
-        msgDiv.innerHTML = `<div class="alert alert-${type} mt-3" role="alert">${message}</div>`;
-        msgDiv.style.display = 'block';
+        const titleMap = {
+            'success': 'Success',
+            'warning': 'Warning',
+            'danger': 'Error',
+            'info': 'Information'
+        };
+        showNotification(titleMap[type] || 'Message', message, type);
     }
 
     // Set today's date as default
@@ -448,6 +533,9 @@
         document.querySelectorAll('input[type="date"]').forEach(input => {
             input.value = today;
         });
+        
+        console.log('✓ Data Input form initialized - Notifications ready');
+        console.log('✓ Notification system is active and ready to display');
     });
 </script>
 {% endblock %}

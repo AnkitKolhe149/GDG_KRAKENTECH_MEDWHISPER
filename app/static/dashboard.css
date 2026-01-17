@@ -1,5 +1,5 @@
 /* ===============================
-   DASHBOARD PAGE STYLES
+   DASHBOARD PAGE STYLES - ENHANCED 3D
    =============================== */
 
 :root {
@@ -9,9 +9,9 @@
 }
 
 [data-theme="dark"] {
-    --glass-bg: rgba(26, 35, 50, 0.6);
-    --glass-border: rgba(58, 69, 87, 0.3);
-    --dark-glass-bg: rgba(15, 20, 25, 0.5);
+    --glass-bg: rgba(26, 40, 71, 0.8);
+    --glass-border: rgba(100, 150, 255, 0.15);
+    --dark-glass-bg: rgba(10, 14, 39, 0.6);
 }
 
 /* ===============================
@@ -23,30 +23,33 @@
     font-size: 1.1rem;
     font-weight: 500;
     letter-spacing: 0.3px;
+    animation: slideInUp 0.6s ease-out;
 }
 
 /* ===============================
-   QUICK ACTION CARDS
+   QUICK ACTION CARDS - PREMIUM 3D
    =============================== */
 
 .quick-action-card {
-    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255, 255, 255, 0.5) 100%);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    border-radius: 1.25rem;
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255, 255, 255, 0.3) 100%);
+    backdrop-filter: blur(12px);
+    border: 1.5px solid var(--glass-border);
+    border-radius: 1.5rem;
     padding: 2rem;
     text-align: center;
     position: relative;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: translateZ(0);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    overflow: visible;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0) rotateX(0deg);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15), inset 0 1px 0 rgba(255,255,255,0.6);
     height: 100%;
+    animation: slideInUp 0.6s ease-out;
+    perspective: 1000px;
 }
 
 [data-theme="dark"] .quick-action-card {
-    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(26, 35, 50, 0.4) 100%);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, rgba(26, 40, 71, 0.8) 0%, rgba(20, 27, 47, 0.6) 100%);
+    box-shadow: 0 8px 32px 0 rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(96, 165, 250, 0.1);
 }
 
 .quick-action-card::before {
@@ -59,43 +62,72 @@
     background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
     opacity: 0.05;
     border-radius: 50%;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(-20px);
+}
+
+.quick-action-card::after {
+    content: '';
+    position: absolute;
+    bottom: -50%;
+    left: -50%;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+    opacity: 0.04;
+    border-radius: 50%;
     transition: all 0.6s ease;
 }
 
 .quick-action-card:hover {
-    transform: translateY(-12px) scale(1.02);
-    box-shadow: 0 20px 60px 0 rgba(59, 130, 246, 0.25);
-    border-color: rgba(59, 130, 246, 0.4);
+    transform: translateY(-16px) translateZ(20px) rotateX(5deg);
+    box-shadow: 0 25px 70px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255,255,255,0.8);
+    border-color: rgba(59, 130, 246, 0.5);
 }
 
 .quick-action-card:hover::before {
-    transform: translate(20px, 20px);
-    opacity: 0.12;
+    transform: translate(25px, 25px) translateZ(10px);
+    opacity: 0.15;
+}
+
+.quick-action-card:hover::after {
+    transform: translate(-15px, -15px) translateZ(5px);
+    opacity: 0.1;
 }
 
 .quick-action-card .card-body {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     padding: 0;
 }
 
 .quick-action-card i {
-    font-size: 3rem;
+    font-size: 3.5rem;
     margin-bottom: 1.5rem;
-    transition: all 0.4s ease;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-block;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .quick-action-card:hover i {
-    transform: rotateY(360deg) scale(1.15);
+    transform: rotateY(360deg) rotateX(180deg) scale(1.25) translateZ(10px);
+    animation: spin3d 0.8s ease-out;
 }
 
 .quick-action-card h5 {
-    font-size: 1.3rem;
-    font-weight: 700;
+    font-size: 1.35rem;
+    font-weight: 800;
     margin-bottom: 0.75rem;
     color: var(--heading-color);
     letter-spacing: -0.5px;
+    transition: all 0.4s ease;
+}
+
+.quick-action-card:hover h5 {
+    transform: translateY(-5px) translateZ(5px);
 }
 
 .quick-action-card p {

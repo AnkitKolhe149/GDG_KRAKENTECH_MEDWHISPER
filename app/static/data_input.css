@@ -2,6 +2,127 @@
    DATA INPUT PAGE - PREMIUM 3D EFFECTS
    =============================== */
 
+/* Premium Toast Notification System */
+.notification-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fb 100%);
+    border: 2px solid var(--primary-color);
+    border-radius: 1.25rem;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 20px 60px rgba(59, 130, 246, 0.35), inset 0 1px 0 rgba(255,255,255,0.8);
+    backdrop-filter: blur(12px);
+    z-index: 99999;
+    max-width: 450px;
+    min-width: 300px;
+    animation: slideInRight 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.notification-toast.success {
+    border-color: #10b981;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.02) 100%);
+}
+
+.notification-toast.danger {
+    border-color: #ef4444;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(239, 68, 68, 0.02) 100%);
+}
+
+.notification-toast.warning {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(245, 158, 11, 0.02) 100%);
+}
+
+.notification-toast.info {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(59, 130, 246, 0.02) 100%);
+}
+
+.notification-icon {
+    font-size: 1.5rem;
+    min-width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-toast.success .notification-icon {
+    color: #10b981;
+    animation: flip 0.5s ease-out;
+}
+
+.notification-toast.danger .notification-icon {
+    color: #ef4444;
+    animation: wiggle 0.5s ease-out;
+}
+
+.notification-toast.warning .notification-icon {
+    color: #f59e0b;
+    animation: wobble 0.5s ease-out;
+}
+
+.notification-toast.info .notification-icon {
+    color: #3b82f6;
+    animation: slideInLeft 0.5s ease-out;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: var(--heading-color);
+    margin-bottom: 0.25rem;
+}
+
+.notification-message {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.3rem;
+    color: var(--text-color);
+    opacity: 0.6;
+    transition: all 0.3s ease;
+    padding: 0;
+    min-width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-close:hover {
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+/* Wiggle animation for errors */
+@keyframes wiggle {
+    0%, 100% { transform: translateX(0) rotateZ(0deg); }
+    25% { transform: translateX(-5px) rotateZ(-2deg); }
+    50% { transform: translateX(5px) rotateZ(2deg); }
+    75% { transform: translateX(-5px) rotateZ(-2deg); }
+}
+
+/* Slide out animation */
+@keyframes slideOutRight {
+    to {
+        opacity: 0;
+        transform: translateX(400px);
+    }
+}
+
 /* Page Title & Subtitle */
 .page-title {
     color: var(--heading-color);
@@ -9,16 +130,19 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    font-size: 2.5rem;
+    font-size: 2.75rem;
     margin-bottom: 0.5rem;
-    animation: slideInUp 0.6s ease-out;
+    animation: slideInUp 0.8s ease-out;
+    font-weight: 900;
+    letter-spacing: -1px;
 }
 
 .page-subtitle {
     color: var(--text-color);
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     margin-bottom: 1.5rem;
-    animation: slideInUp 0.6s ease-out 0.1s both;
+    animation: slideInUp 0.8s ease-out 0.15s both;
+    font-weight: 500;
 }
 
 /* Validation Message */
@@ -29,69 +153,108 @@
 
 .validation-message.show {
     display: block;
-    animation: slideInDown 0.4s ease-out;
+    animation: slideInDown 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Tab Navigation */
 .tab-navigation {
-    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255,255,255,0.3) 100%);
-    backdrop-filter: blur(10px);
-    border-bottom: 2px solid var(--glass-border);
-    border-radius: 1rem;
-    padding: 0.75rem;
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255,255,255,0.2) 100%);
+    backdrop-filter: blur(15px);
+    border: 1.5px solid var(--glass-border);
+    border-radius: 1.25rem;
+    padding: 0.85rem;
     margin-bottom: 2rem;
-    border: 1px solid var(--glass-border) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.5);
+    animation: slideInDown 0.7s ease-out;
 }
 
 .tab-link {
     color: var(--text-color) !important;
     border: none;
-    border-radius: 0.75rem;
+    border-radius: 0.85rem;
     margin-right: 0.5rem;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    font-weight: 500;
-    padding: 0.65rem 1rem !important;
+    font-weight: 600;
+    padding: 0.7rem 1.2rem !important;
+    transform: translateZ(0);
+}
+
+.tab-link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: transparent;
+    border-radius: 0.85rem;
+    opacity: 0;
+    transition: all 0.4s ease;
 }
 
 .tab-link:hover {
-    background: rgba(59, 130, 246, 0.1);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(16, 185, 129, 0.08) 100%);
     color: var(--primary-color) !important;
-    transform: translateY(-2px);
+    transform: translateY(-3px) translateZ(5px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
 }
 
 .tab-link.active {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     color: white !important;
-    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
-    transform: scale(1.05);
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.35);
+    transform: translateY(-4px) translateZ(8px) scale(1.05);
 }
 
-/* Form Card Styling */
+/* Form Card Styling - Premium 3D */
 .form-card {
-    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255,255,255,0.3) 100%);
-    border: 1px solid var(--glass-border);
-    border-radius: 1rem;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255,255,255,0.2) 100%);
+    border: 1.5px solid var(--glass-border);
+    border-radius: 1.25rem;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.6);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     margin-bottom: 2rem;
-    animation: slideInUp 0.6s ease-out;
+    animation: slideInUp 0.8s ease-out;
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(0) rotateX(0deg);
+    perspective: 1200px;
+}
+
+.form-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+    opacity: 0.03;
+    border-radius: 50%;
+    transition: all 0.8s ease;
+    transform: translateZ(-30px);
+}
+
+.form-card:hover::before {
+    opacity: 0.08;
+    transform: translate(30px, 30px) translateZ(-10px);
 }
 
 .form-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 48px rgba(59, 130, 246, 0.2);
+    transform: translateY(-6px) translateZ(20px) rotateX(2deg);
+    box-shadow: 0 20px 60px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255,255,255,0.8);
+    border-color: rgba(59, 130, 246, 0.3);
 }
 
 .form-card-body {
-    padding: 2rem;
+    padding: 2.5rem;
+    position: relative;
+    z-index: 1;
 }
 
 .data-form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.75rem;
 }
 
 .family-history-description {
@@ -135,25 +298,29 @@
     letter-spacing: 0.3px;
 }
 
-/* Form Input */
+/* Form Input - Enhanced 3D */
 .form-control {
-    border-radius: 0.75rem;
+    border-radius: 0.85rem;
     border: 2px solid var(--card-border);
     background: var(--body-bg);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     font-size: 0.95rem;
-    padding: 0.65rem 0.875rem;
+    padding: 0.75rem 1rem;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    transform: translateZ(0);
 }
 
 .form-control:hover {
-    border-color: rgba(59, 130, 246, 0.5);
-    background: rgba(59, 130, 246, 0.02);
+    border-color: rgba(59, 130, 246, 0.6);
+    background: rgba(59, 130, 246, 0.03);
+    transform: translateY(-2px) translateZ(3px);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(59, 130, 246, 0.1);
 }
 
 .form-control:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.3rem rgba(59, 130, 246, 0.15);
-    transform: translateY(-2px);
+    box-shadow: 0 0 0 0.3rem rgba(59, 130, 246, 0.15), inset 0 1px 3px rgba(0,0,0,0.05);
+    transform: translateY(-4px) translateZ(8px);
     background: var(--body-bg);
 }
 
@@ -161,44 +328,52 @@
     color: rgba(107, 114, 128, 0.7);
 }
 
-/* Select Inputs */
+/* Select Inputs - Enhanced 3D */
 .form-select {
-    border-radius: 0.75rem;
+    border-radius: 0.85rem;
     border: 2px solid var(--card-border);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 0.65rem 0.875rem;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0.75rem 1rem;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%233b82f6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
     background-size: 16px 12px;
     padding-right: 2.5rem;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    transform: translateZ(0);
 }
 
 .form-select:hover {
-    border-color: rgba(59, 130, 246, 0.5);
+    border-color: rgba(59, 130, 246, 0.6);
     background-color: rgba(59, 130, 246, 0.02);
+    transform: translateY(-2px) translateZ(3px);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(59, 130, 246, 0.1);
 }
 
 .form-select:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.3rem rgba(59, 130, 246, 0.15);
+    box-shadow: 0 0 0 0.3rem rgba(59, 130, 246, 0.15), inset 0 1px 3px rgba(0,0,0,0.05);
     outline: none;
+    transform: translateY(-4px) translateZ(8px);
 }
 
-/* Submit Button */
+/* Submit Button - Premium 3D */
 .btn-primary {
     width: 100%;
-    margin-top: 1.5rem;
-    border-radius: 0.75rem;
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 0.875rem 1.5rem;
+    margin-top: 2rem;
+    border-radius: 0.85rem;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 1rem 1.5rem;
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    border: none;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     color: white;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    transform: translateZ(0);
+    cursor: pointer;
 }
 
 .btn-primary::before {
@@ -208,8 +383,18 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s ease;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: 0.85rem;
 }
 
 .btn-primary:hover::before {
@@ -217,18 +402,24 @@
 }
 
 .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
+    transform: translateY(-4px) translateZ(12px) scale(1.02);
+    box-shadow: 0 15px 50px rgba(59, 130, 246, 0.4);
+}
+
+.btn-primary:hover::after {
+    opacity: 1;
 }
 
 .btn-primary:active {
-    transform: translateY(-1px);
+    transform: translateY(-1px) translateZ(6px) scale(0.98);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.25);
 }
 
 .btn-primary:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 /* Validation Message */
@@ -287,148 +478,327 @@
     }
 }
 
-/* Family History Checkboxes */
+/* Family History Checkboxes - Premium 3D */
 .form-check {
     padding-left: 0;
     margin-bottom: 1rem;
 }
 
 .form-check-input {
-    width: 1.25rem;
-    height: 1.25rem;
-    margin-right: 0.75rem;
+    width: 1.35rem;
+    height: 1.35rem;
+    margin-right: 0.85rem;
     margin-top: 0.125rem;
-    border: 2px solid var(--card-border);
-    border-radius: 0.35rem;
+    border: 2.5px solid var(--card-border);
+    border-radius: 0.4rem;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     accent-color: var(--primary-color);
     flex-shrink: 0;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    transform: translateZ(0);
 }
 
 .form-check-input:hover {
-    transform: scale(1.15);
+    transform: scale(1.2) translateZ(5px);
     border-color: var(--primary-color);
-    box-shadow: 0 0 12px rgba(59, 130, 246, 0.2);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05), 0 0 15px rgba(59, 130, 246, 0.25);
 }
 
 .form-check-input:checked {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     border-color: var(--primary-color);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.35), inset 0 1px 3px rgba(0,0,0,0.1);
+    animation: flip 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .form-check-input:checked:hover {
-    transform: scale(1.15);
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    transform: scale(1.2) translateZ(8px) rotateX(10deg);
+    box-shadow: 0 6px 24px rgba(59, 130, 246, 0.4), inset 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .form-check-input:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 0 0.3rem rgba(59, 130, 246, 0.2), inset 0 1px 3px rgba(0,0,0,0.05);
+    outline: none;
 }
 
 .form-check-label {
     color: var(--text-color);
     cursor: pointer;
     transition: all 0.3s ease;
-    font-weight: 500;
+    font-weight: 550;
     user-select: none;
     margin-bottom: 0;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
 }
 
 .form-check-label:hover {
     color: var(--primary-color);
+    transform: translateX(2px);
 }
 
-/* Family History Section Styling */
+/* =====================================
+   FAMILY HISTORY SECTION - ULTRA PREMIUM 3D
+   ===================================== */
+
+#familyHistoryForm .family-history-description {
+    color: var(--text-color);
+    font-size: 1rem;
+    margin-bottom: 2.5rem;
+    opacity: 0.95;
+    font-weight: 500;
+    animation: slideInUp 0.7s ease-out;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(16, 185, 129, 0.05) 100%);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 0.75rem;
+}
+
+/* Disease/Condition Container - Each Row */
 #familyHistoryForm .row {
-    background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
-    backdrop-filter: blur(8px);
-    border: 1.5px solid var(--glass-border);
-    border-radius: 0.875rem;
-    padding: 1.75rem;
-    margin-bottom: 1.75rem;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: slideInUp 0.6s ease-out;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(16, 185, 129, 0.03) 100%);
+    backdrop-filter: blur(20px);
+    border: 2px solid var(--glass-border);
+    border-radius: 1.35rem;
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
+    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: slideInUp 0.8s ease-out;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.7);
+    transform: translateZ(0) rotateX(0deg);
+    perspective: 1200px;
 }
 
+/* Animated gradient overlays */
+#familyHistoryForm .row::before {
+    content: '';
+    position: absolute;
+    top: -60%;
+    right: -60%;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+    opacity: 0.03;
+    border-radius: 50%;
+    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(-40px);
+    z-index: 0;
+}
+
+#familyHistoryForm .row::after {
+    content: '';
+    position: absolute;
+    bottom: -60%;
+    left: -60%;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+    opacity: 0.025;
+    border-radius: 50%;
+    transition: all 1s ease;
+    transform: translateZ(-35px);
+    z-index: 0;
+}
+
+#familyHistoryForm .row:hover::before {
+    opacity: 0.12;
+    transform: translate(40px, 40px) translateZ(-15px);
+}
+
+#familyHistoryForm .row:hover::after {
+    opacity: 0.08;
+    transform: translate(-30px, -30px) translateZ(-10px);
+}
+
+/* Enhanced Hover State */
 #familyHistoryForm .row:hover {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
-    border-color: rgba(59, 130, 246, 0.3);
-    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.15);
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(16, 185, 129, 0.08) 100%);
+    border-color: rgba(59, 130, 246, 0.45);
+    box-shadow: 0 20px 70px rgba(59, 130, 246, 0.22), inset 0 1px 0 rgba(255,255,255,0.8);
+    transform: translateY(-6px) translateZ(20px) rotateX(3deg);
 }
 
+/* Row Content Wrapper */
+#familyHistoryForm .row > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Label Container (Diabetes, Hypertension, etc) */
 #familyHistoryForm .row .col-12 {
-    margin-bottom: 1rem;
+    margin-bottom: 1.8rem;
+    animation: slideInUp 0.8s ease-out;
+    animation-fill-mode: both;
 }
 
+#familyHistoryForm .row .col-12:nth-child(1) { animation-delay: 0s; }
+#familyHistoryForm .row .col-12:nth-child(2) { animation-delay: 0.15s; }
+#familyHistoryForm .row .col-12:nth-child(3) { animation-delay: 0.3s; }
+#familyHistoryForm .row .col-12:nth-child(4) { animation-delay: 0.45s; }
+
+/* Disease/Condition Labels */
 #familyHistoryForm .form-label {
-    font-weight: 700;
+    font-weight: 900;
     color: var(--heading-color);
-    font-size: 1.05rem;
-    letter-spacing: 0.5px;
+    font-size: 1.25rem;
+    letter-spacing: -0.5px;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
     position: relative;
 }
 
+/* Color-coded accent bars for each condition */
 #familyHistoryForm .form-label::before {
     content: '';
     display: inline-block;
-    width: 4px;
-    height: 24px;
+    width: 6px;
+    height: 32px;
     background: linear-gradient(180deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    border-radius: 3px;
-    animation: slideInUp 0.6s ease-out;
-}
-
-/* Column alignment for checkboxes */
-#familyHistoryForm .col-md-4 {
-    padding: 0.75rem;
-}
-
-#familyHistoryForm .form-check {
-    background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.2) 100%);
-    backdrop-filter: blur(6px);
-    padding: 0.875rem 1.125rem;
-    border-radius: 0.625rem;
-    border: 1px solid rgba(255,255,255,0.3);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0;
-    cursor: pointer;
-}
-
-#familyHistoryForm .form-check:hover {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(16, 185, 129, 0.08) 100%);
-    border-color: rgba(59, 130, 246, 0.4);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.15);
-}
-
-#familyHistoryForm .form-check-input {
-    margin-right: 0;
-    margin-top: 0;
+    border-radius: 4px;
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.35);
+    animation: slideInLeft 0.7s cubic-bezier(0.4, 0, 0.2, 1);
     flex-shrink: 0;
 }
 
+/* Checkbox Column Grid */
+#familyHistoryForm .col-md-4 {
+    padding: 1rem;
+}
+
+/* Individual Checkbox Container - Single Clickable Box */
+#familyHistoryForm .form-check {
+    background: linear-gradient(135deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.35) 100%);
+    backdrop-filter: blur(16px);
+    padding: 1.5rem;
+    border-radius: 0.95rem;
+    border: 2.5px solid rgba(59, 130, 246, 0.3);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 0;
+    cursor: pointer;
+    box-shadow: inset 0 1px 3px rgba(255,255,255,0.4), 0 4px 12px rgba(0,0,0,0.05);
+    transform: translateZ(0);
+    min-height: 70px;
+    text-align: center;
+    position: relative;
+}
+
+/* Checkbox Input Box - Hidden Completely */
+#familyHistoryForm .form-check-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    z-index: 3;
+}
+
+/* Checkbox Hover - Lift and Glow */
+#familyHistoryForm .form-check:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(16, 185, 129, 0.12) 100%);
+    border-color: rgba(59, 130, 246, 0.6);
+    transform: translateY(-6px) translateZ(12px) rotateX(3deg);
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.2), inset 0 1px 3px rgba(255,255,255,0.4);
+}
+
+/* Checkbox Checked State - Full Highlight */
+#familyHistoryForm .form-check.checked {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.5), inset 0 1px 3px rgba(255,255,255,0.3);
+    transform: translateY(-8px) translateZ(15px) scale(1.02);
+    animation: flip 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Checkbox Checked Hover - Enhanced */
+#familyHistoryForm .form-check.checked:hover {
+    transform: translateY(-10px) translateZ(20px) scale(1.04);
+    box-shadow: 0 16px 40px rgba(59, 130, 246, 0.6), inset 0 1px 3px rgba(255,255,255,0.3);
+}
+
+/* Checkbox Label Text - Main Content */
 #familyHistoryForm .form-check-label {
     margin-bottom: 0;
     margin-left: 0;
     width: 100%;
-    font-weight: 500;
+    font-weight: 800;
+    color: var(--heading-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+    z-index: 2;
+    position: relative;
+    font-size: 1.05rem;
+    letter-spacing: -0.3px;
 }
 
-/* Responsive Design */
+/* Checked Label - White Text */
+#familyHistoryForm .form-check.checked .form-check-label {
+    color: white;
+    font-weight: 900;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+[data-theme="dark"] #familyHistoryForm .form-label {
+    color: #f0f5ff;
+}
+
+/* Dark Mode - Premium Notifications */
+[data-theme="dark"] .notification-toast {
+    background: linear-gradient(135deg, #1a2847 0%, #141b2f 100%);
+    border-color: #3b82f6;
+    box-shadow: 0 20px 60px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(96, 165, 250, 0.1);
+}
+
+[data-theme="dark"] .notification-toast.success {
+    border-color: #34d399;
+    background: linear-gradient(135deg, rgba(52, 211, 153, 0.1) 0%, rgba(52, 211, 153, 0.05) 100%);
+}
+
+[data-theme="dark"] .notification-toast.danger {
+    border-color: #f87171;
+    background: linear-gradient(135deg, rgba(248, 113, 113, 0.1) 0%, rgba(248, 113, 113, 0.05) 100%);
+}
+
+[data-theme="dark"] .notification-toast.warning {
+    border-color: #fbbf24;
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(251, 191, 36, 0.05) 100%);
+}
+
+[data-theme="dark"] .notification-toast.info {
+    border-color: #60a5fa;
+    background: linear-gradient(135deg, rgba(96, 165, 250, 0.1) 0%, rgba(96, 165, 250, 0.05) 100%);
+}
+
+[data-theme="dark"] .notification-title {
+    color: #f0f5ff;
+}
+
+[data-theme="dark"] .notification-message {
+    color: rgba(232, 238, 247, 0.85);
+}
+
+[data-theme="dark"] .notification-close {
+    color: rgba(232, 238, 247, 0.7);
+}
+
+[data-theme="dark"] .notification-close:hover {
+    color: #60a5fa;
+}
+
+/* Responsive Notifications */
 @media (max-width: 768px) {
     .page-title {
         font-size: 1.875rem;
@@ -528,28 +898,70 @@
     }
 }
 
-/* Dark Mode Support */
+/* Dark Mode Support - Enhanced */
 [data-theme="dark"] .page-title {
+    color: var(--heading-color);
+    background: linear-gradient(135deg, #60a5fa 0%, #34d399 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+[data-theme="dark"] .page-subtitle {
+    color: rgba(232, 238, 247, 0.85);
+}
+
+[data-theme="dark"] .form-label {
     color: var(--heading-color);
 }
 
 [data-theme="dark"] .form-control,
 [data-theme="dark"] .form-select {
-    background: var(--body-bg);
+    background: linear-gradient(135deg, #1a2847 0%, #141b2f 100%);
     color: var(--text-color);
+    border-color: rgba(100, 150, 255, 0.2);
 }
 
 [data-theme="dark"] .form-control:hover,
 [data-theme="dark"] .form-select:hover {
-    background: rgba(59, 130, 246, 0.05);
+    background: linear-gradient(135deg, #1e3a5f 0%, #1a2847 100%);
+    border-color: rgba(100, 150, 255, 0.4);
+}
+
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus {
+    background: linear-gradient(135deg, #223d63 0%, #1a2847 100%);
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
 }
 
 [data-theme="dark"] #familyHistoryForm .row {
-    border-color: var(--glass-border);
+    background: linear-gradient(135deg, rgba(26, 40, 71, 0.4) 0%, rgba(20, 27, 47, 0.3) 100%);
+    border-color: rgba(96, 165, 250, 0.2);
+}
+
+[data-theme="dark"] #familyHistoryForm .row:hover {
+    background: linear-gradient(135deg, rgba(26, 40, 71, 0.6) 0%, rgba(20, 27, 47, 0.5) 100%);
+    border-color: rgba(96, 165, 250, 0.4);
 }
 
 [data-theme="dark"] #familyHistoryForm .form-check {
-    border-color: rgba(59, 130, 246, 0.2);
+    background: linear-gradient(135deg, rgba(26, 40, 71, 0.5) 0%, rgba(20, 27, 47, 0.4) 100%);
+    border-color: rgba(96, 165, 250, 0.2);
+}
+
+[data-theme="dark"] #familyHistoryForm .form-check:hover {
+    background: linear-gradient(135deg, rgba(26, 40, 71, 0.7) 0%, rgba(20, 27, 47, 0.6) 100%);
+    border-color: rgba(96, 165, 250, 0.4);
+}
+
+[data-theme="dark"] #familyHistoryForm .form-check.checked {
+    background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+    border-color: #60a5fa;
+}
+
+[data-theme="dark"] #familyHistoryForm .form-label {
+    color: #f0f5ff;
 }
 
 /* Focus States for Accessibility */
@@ -557,6 +969,25 @@
 .form-select:focus-visible {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
+}
+
+/* Responsive Notifications */
+@media (max-width: 768px) {
+    .notification-toast {
+        top: 1rem;
+        right: 1rem;
+        left: 1rem;
+        max-width: none;
+        padding: 1.25rem 1.5rem;
+    }
+    
+    .notification-title {
+        font-size: 0.95rem;
+    }
+    
+    .notification-message {
+        font-size: 0.9rem;
+    }
 }
 
 .btn-primary:focus-visible {
