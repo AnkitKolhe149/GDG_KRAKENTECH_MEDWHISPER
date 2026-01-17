@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}MedWhisper - Home{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="row align-items-center mb-5" id="heroSection">
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-4" style="color: var(--heading-color);">
+                Detect What You Don't Know You Have
+            </h1>
+            <p class="lead mb-4" style="color: var(--text-color);">
+                AI-driven early risk detection for silent diseases including diabetes, 
+                hypertension, liver disorders, cardiac risk, and mental health conditions.
+            </p>
+            <div class="d-grid gap-3 d-sm-flex" id="heroCTA">
+                <button class="btn btn-primary btn-lg px-4" onclick="handleHeroCTA()">
+                    <i class="fab fa-google me-2"></i> Get Started with Google
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=600&fit=crop" 
+                 alt="Healthcare" class="img-fluid rounded shadow-lg">
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row mt-5 pt-5">
+        <div class="col-12 text-center mb-5">
+            <h2 class="fw-bold" style="color: var(--heading-color);">How It Works</h2>
+            <p class="text-muted">Our AI analyzes multiple health signals to detect risks early</p>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 text-center p-4" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="fas fa-flask fa-3x text-primary"></i>
+                    </div>
+                    <h5 class="card-title" style="color: var(--heading-color);">Lab Trends</h5>
+                    <p class="card-text" style="color: var(--text-color);">Track blood tests, glucose, cholesterol, liver enzymes over time</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 text-center p-4" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="fas fa-running fa-3x text-success"></i>
+                    </div>
+                    <h5 class="card-title" style="color: var(--heading-color);">Lifestyle Data</h5>
+                    <p class="card-text" style="color: var(--text-color);">Sleep, activity, nutrition, and exercise patterns</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 text-center p-4" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="fas fa-brain fa-3x text-info"></i>
+                    </div>
+                    <h5 class="card-title" style="color: var(--heading-color);">Mental Health</h5>
+                    <p class="card-text" style="color: var(--text-color);">Stress, mood, anxiety levels and sleep quality</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 text-center p-4" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="fas fa-dna fa-3x text-warning"></i>
+                    </div>
+                    <h5 class="card-title" style="color: var(--heading-color);">Family History</h5>
+                    <p class="card-text" style="color: var(--text-color);">Genetic predisposition and hereditary risk factors</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disease Detection Section -->
+    <div class="row mt-5 pt-5 rounded-3 p-5" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
+        <div class="col-12 text-center mb-4">
+            <h2 class="fw-bold" style="color: var(--heading-color);">Diseases We Detect</h2>
+            <p class="text-muted">Early risk assessment for multiple conditions</p>
+        </div>
+        
+        <div class="col-md-6 col-lg-4 mb-3">
+            <div class="d-flex align-items-center p-3 rounded shadow-sm" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
+                <i class="fas fa-heartbeat fa-2x text-danger me-3"></i>
+                <div>
+                    <h6 class="mb-0" style="color: var(--heading-color);">Diabetes</h6>
+                    <small style="color: var(--text-color);">Type 2 diabetes risk</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4 mb-3">
+            <div class="d-flex align-items-center p-3 rounded shadow-sm" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
+                <i class="fas fa-heartbeat fa-2x text-primary me-3"></i>
+                <div>
+                    <h6 class="mb-0" style="color: var(--heading-color);">Hypertension</h6>
+                    <small style="color: var(--text-color);">High blood pressure risk</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4 mb-3">
+            <div class="d-flex align-items-center p-3 rounded shadow-sm" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
+                <i class="fas fa-heartbeat fa-2x text-warning me-3"></i>
+                <div>
+                    <h6 class="mb-0" style="color: var(--heading-color);">Liver Disease</h6>
+                    <small style="color: var(--text-color);">Liver function disorders</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4 mb-3">
+            <div class="d-flex align-items-center p-3 rounded shadow-sm" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
+                <i class="fas fa-heart fa-2x text-danger me-3"></i>
+                <div>
+                    <h6 class="mb-0" style="color: var(--heading-color);">Cardiac Risk</h6>
+                    <small style="color: var(--text-color);">Heart disease risk</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4 mb-3">
+            <div class="d-flex align-items-center p-3 rounded shadow-sm" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
+                <i class="fas fa-brain fa-2x text-info me-3"></i>
+                <div>
+                    <h6 class="mb-0" style="color: var(--heading-color);">Mental Health</h6>
+                    <small style="color: var(--text-color);">Depression & anxiety risk</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="row mt-5 pt-5">
+        <div class="col-12 text-center">
+            <h2 class="fw-bold mb-4" style="color: var(--heading-color);">Start Your Health Journey Today</h2>
+            <p class="lead mb-4" style="color: var(--text-color);">Get personalized risk assessments and preventive recommendations</p>
+            <button class="btn btn-primary btn-lg" id="finalCTA" onclick="handleFinalCTA()">
+                <i class="fab fa-google me-2"></i> Sign In with Google
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Dynamic content loading based on authentication state
+    firebase.auth().onAuthStateChanged((user) => {
+        const heroCTA = document.getElementById('heroCTA');
+        const finalCTA = document.getElementById('finalCTA');
+        
+        if (user) {
+            // User is logged in - update CTA buttons
+            heroCTA.innerHTML = `
+                <a href="/dashboard" class="btn btn-primary btn-lg px-4">
+                    <i class="fas fa-chart-line me-2"></i> Go to Dashboard
+                </a>
+                <a href="/risk-report" class="btn btn-outline-primary btn-lg px-4">
+                    <i class="fas fa-file-medical me-2"></i> View Your Report
+                </a>
+            `;
+            
+            finalCTA.innerHTML = `
+                <a href="/dashboard" class="btn btn-primary btn-lg">
+                    <i class="fas fa-chart-line me-2"></i> Go to Dashboard
+                </a>
+            `;
+        }
+    });
+    
+    function handleHeroCTA() {
+        firebase.auth().currentUser ? window.location.href = '/dashboard' : signInWithGoogle();
+    }
+    
+    function handleFinalCTA() {
+        firebase.auth().currentUser ? window.location.href = '/dashboard' : signInWithGoogle();
+    }
+</script>
+{% endblock %}

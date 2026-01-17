@@ -1,0 +1,408 @@
+{% extends "base.html" %}
+
+{% block title %}Add Health Data - MedWhisper{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold" style="color: var(--heading-color);">
+                <i class="fas fa-edit me-2"></i> Add Health Data
+            </h2>
+            <p style="color: var(--text-color);">Enter your health information for accurate risk assessment</p>
+            <div id="dataValidationMessage" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <ul class="nav nav-tabs mb-4" role="tablist" style="border-bottom-color: var(--card-border);">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" href="#labData" style="color: var(--text-color);">
+                <i class="fas fa-flask me-2"></i> Lab Results
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#lifestyleData" style="color: var(--text-color);">
+                <i class="fas fa-running me-2"></i> Lifestyle
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#mentalHealthData" style="color: var(--text-color);">
+                <i class="fas fa-brain me-2"></i> Mental Health
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#familyHistory" style="color: var(--text-color);">
+                <i class="fas fa-dna me-2"></i> Family History
+            </a>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+        <!-- Lab Data Form -->
+        <div class="tab-pane fade show active" id="labData">
+            <div class="card" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                <div class="card-body" style="color: var(--text-color);">
+                    <form id="labDataForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Test Date *</label>
+                                <input type="date" class="form-control" name="test_date" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Glucose (mg/dL)</label>
+                                <input type="number" class="form-control" name="glucose" placeholder="70-140">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">HbA1c (%)</label>
+                                <input type="number" step="0.1" class="form-control" name="hba1c" placeholder="4-7">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Cholesterol (mg/dL)</label>
+                                <input type="number" class="form-control" name="cholesterol" placeholder="< 200">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">HDL (mg/dL)</label>
+                                <input type="number" class="form-control" name="hdl" placeholder="> 40">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">LDL (mg/dL)</label>
+                                <input type="number" class="form-control" name="ldl" placeholder="< 130">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Triglycerides (mg/dL)</label>
+                                <input type="number" class="form-control" name="triglycerides" placeholder="< 150">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Blood Pressure Systolic</label>
+                                <input type="number" class="form-control" name="blood_pressure_systolic" placeholder="< 120">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Blood Pressure Diastolic</label>
+                                <input type="number" class="form-control" name="blood_pressure_diastolic" placeholder="< 80">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Heart Rate (bpm)</label>
+                                <input type="number" class="form-control" name="heart_rate" placeholder="60-100">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i> Save Lab Data
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lifestyle Data Form -->
+        <div class="tab-pane fade" id="lifestyleData">
+            <div class="card" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                <div class="card-body" style="color: var(--text-color);">
+                    <form id="lifestyleDataForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Date *</label>
+                                <input type="date" class="form-control" name="date" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Sleep Hours</label>
+                                <input type="number" step="0.5" class="form-control" name="sleep_hours" placeholder="7-9">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Sleep Quality</label>
+                                <select class="form-select" name="sleep_quality">
+                                    <option value="">Select...</option>
+                                    <option value="poor">Poor</option>
+                                    <option value="fair">Fair</option>
+                                    <option value="good">Good</option>
+                                    <option value="excellent">Excellent</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Exercise Minutes</label>
+                                <input type="number" class="form-control" name="exercise_minutes" placeholder="30+">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Steps</label>
+                                <input type="number" class="form-control" name="steps" placeholder="10000+">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Water Intake (ml)</label>
+                                <input type="number" class="form-control" name="water_intake_ml" placeholder="2000+">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Diet Quality</label>
+                                <select class="form-select" name="diet_quality">
+                                    <option value="">Select...</option>
+                                    <option value="poor">Poor</option>
+                                    <option value="fair">Fair</option>
+                                    <option value="balanced">Balanced</option>
+                                    <option value="excellent">Excellent</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Alcohol Units</label>
+                                <input type="number" class="form-control" name="avg_alcohol_units" placeholder="0-2">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Smoking</label>
+                                <select class="form-select" name="smoking">
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i> Save Lifestyle Data
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mental Health Data Form -->
+        <div class="tab-pane fade" id="mentalHealthData">
+            <div class="card" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                <div class="card-body" style="color: var(--text-color);">
+                    <form id="mentalHealthDataForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Date *</label>
+                                <input type="date" class="form-control" name="date" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Stress Level (1-10)</label>
+                                <input type="number" min="1" max="10" class="form-control" name="stress_level">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Anxiety Level (1-10)</label>
+                                <input type="number" min="1" max="10" class="form-control" name="anxiety_level">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Mood</label>
+                                <select class="form-select" name="mood">
+                                    <option value="">Select...</option>
+                                    <option value="depressed">Depressed</option>
+                                    <option value="low">Low</option>
+                                    <option value="neutral">Neutral</option>
+                                    <option value="good">Good</option>
+                                    <option value="excellent">Excellent</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Social Interaction</label>
+                                <select class="form-select" name="social_interaction">
+                                    <option value="">Select...</option>
+                                    <option value="low">Low</option>
+                                    <option value="moderate">Moderate</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Work-Life Balance</label>
+                                <select class="form-select" name="work_life_balance">
+                                    <option value="">Select...</option>
+                                    <option value="poor">Poor</option>
+                                    <option value="fair">Fair</option>
+                                    <option value="good">Good</option>
+                                    <option value="excellent">Excellent</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i> Save Mental Health Data
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Family History Form -->
+        <div class="tab-pane fade" id="familyHistory">
+            <div class="card" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                <div class="card-body" style="color: var(--text-color);">
+                    <form id="familyHistoryForm">
+                        <p class="text-muted mb-4">Check any conditions present in your immediate family (parents, siblings, grandparents)</p>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Diabetes</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="diabetes" value="parent">
+                                <label class="form-check-label">Parent(s)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="diabetes" value="grandparent">
+                                <label class="form-check-label">Grandparent(s)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="diabetes" value="sibling">
+                                <label class="form-check-label">Sibling(s)</label>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Hypertension</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="hypertension" value="parent">
+                                <label class="form-check-label">Parent(s)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="hypertension" value="grandparent">
+                                <label class="form-check-label">Grandparent(s)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="hypertension" value="sibling">
+                                <label class="form-check-label">Sibling(s)</label>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Heart Disease</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="heart_disease" value="parent">
+                                <label class="form-check-label">Parent(s)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="heart_disease" value="grandparent">
+                                <label class="form-check-label">Grandparent(s)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="heart_disease" value="sibling">
+                                <label class="form-check-label">Sibling(s)</label>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Mental Health Conditions</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="mental_health" value="parent">
+                                <label class="form-check-label">Parent(s)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="mental_health" value="grandparent">
+                                <label class="form-check-label">Grandparent(s)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="mental_health" value="sibling">
+                                <label class="form-check-label">Sibling(s)</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i> Save Family History
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Form submission handlers
+    document.getElementById('labDataForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await submitForm(e.target, '/api/data/lab', 'Lab data');
+    });
+
+    document.getElementById('lifestyleDataForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await submitForm(e.target, '/api/data/lifestyle', 'Lifestyle data');
+    });
+
+    document.getElementById('mentalHealthDataForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await submitForm(e.target, '/api/data/mental-health', 'Mental health data');
+    });
+
+    document.getElementById('familyHistoryForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = {
+            diabetes: formData.getAll('diabetes'),
+            hypertension: formData.getAll('hypertension'),
+            heart_disease: formData.getAll('heart_disease'),
+            mental_health: formData.getAll('mental_health'),
+            liver_disease: []
+        };
+        
+        try {
+            const result = await apiCall('/api/data/family-history', 'POST', data);
+            if (result.success) {
+                alert('Family history saved successfully!');
+                e.target.reset();
+            } else {
+                alert(result.error || 'Failed to save data');
+            }
+        } catch (error) {
+            alert('Failed to save data');
+        }
+    });
+
+    async function submitForm(form, endpoint, dataType) {
+        const formData = new FormData(form);
+        const data = {};
+        let hasValidData = false;
+        
+        // Validate and collect form data
+        for (let [key, value] of formData.entries()) {
+            if (value !== '') {
+                hasValidData = true;
+                // Convert numeric fields
+                if (key !== 'test_date' && key !== 'date' && !key.includes('quality') && !key.includes('smoking') && !key.includes('mood') && !key.includes('social') && !key.includes('balance')) {
+                    const numValue = parseFloat(value);
+                    // Validate numeric range
+                    if (!isNaN(numValue)) {
+                        data[key] = numValue;
+                    }
+                } else if (key === 'smoking') {
+                    data[key] = value === 'true';
+                } else {
+                    data[key] = value;
+                }
+            }
+        }
+        
+        if (!hasValidData) {
+            showValidationMessage(`Please enter at least one field for ${dataType}`, 'warning');
+            return;
+        }
+        
+        const btn = form.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+        
+        try {
+            const result = await apiCall(endpoint, 'POST', data);
+            if (result.success) {
+                showValidationMessage(`${dataType} saved successfully!`, 'success');
+                form.reset();
+                setTimeout(() => {
+                    document.getElementById('dataValidationMessage').style.display = 'none';
+                }, 3000);
+            } else {
+                showValidationMessage(result.error || `Failed to save ${dataType}`, 'danger');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            showValidationMessage(`Failed to save ${dataType}. Please try again.`, 'danger');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
+    }
+    
+    function showValidationMessage(message, type) {
+        const msgDiv = document.getElementById('dataValidationMessage');
+        msgDiv.innerHTML = `<div class="alert alert-${type} mt-3" role="alert">${message}</div>`;
+        msgDiv.style.display = 'block';
+    }
+
+    // Set today's date as default
+    document.addEventListener('DOMContentLoaded', () => {
+        const today = new Date().toISOString().split('T')[0];
+        document.querySelectorAll('input[type="date"]').forEach(input => {
+            input.value = today;
+        });
+    });
+</script>
+{% endblock %}

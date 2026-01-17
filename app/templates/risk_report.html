@@ -1,0 +1,567 @@
+{% extends "base.html" %}
+
+{% block title %}Risk Report - MedWhisper{% endblock %}
+
+{% block extra_css %}
+<style>
+    .disease-card {
+        border: 1px solid var(--card-border);
+        border-radius: 1rem;
+        transition: all 0.3s ease;
+        background: var(--card-bg);
+        overflow: hidden;
+    }
+    .disease-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+    .disease-card .card-header-strip {
+        height: 6px;
+        width: 100%;
+    }
+    .disease-card.low .card-header-strip { background-color: #10b981; }
+    .disease-card.medium .card-header-strip { background-color: #f59e0b; }
+    .disease-card.high .card-header-strip { background-color: #ef4444; }
+    .disease-card.very-high .card-header-strip { background-color: #dc2626; }
+    
+    .progress-custom {
+        height: 12px;
+        background-color: var(--light-color);
+        border-radius: 9999px;
+        overflow: hidden;
+        margin-top: 0.5rem;
+    }
+    .progress-bar {
+        border-radius: 9999px;
+    }
+
+    .stat-card {
+        background: var(--card-bg);
+        border-radius: 1rem;
+        padding: 2rem;
+        text-align: center;
+        border: 1px solid var(--card-border);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .overall-score-display {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        border-radius: 50%;
+        background: conic-gradient(var(--primary-color) var(--score-percent), var(--light-color) 0);
+    }
+    .overall-score-inner {
+        width: 130px;
+        height: 130px;
+        background: var(--card-bg);
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-5 align-items-center">
+        <div class="col-md-8">
+            <h2 class="fw-bold mb-1" style="color: var(--heading-color);">Risk Assessment Report</h2>
+            <p class="text-muted mb-0" id="reportDate">Loading report...</p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+             <button class="btn btn-primary" onclick="generateNewAssessment()">
+                <i class="fas fa-sync-alt me-2"></i> Update Assessment
+            </button>
+        </div>
+    </div>
+
+    <!-- Overall Risk Score -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm overflow-hidden" style="background-color: var(--card-bg);">
+                <div class="card-body p-0">
+                    <div class="row g-0">
+                        <div class="col-md-8 p-5" style="background-color: var(--card-bg);">
+                            <h3 class="fw-bold mb-3" style="color: var(--heading-color);">Overall Health Status</h3>
+                            <p class="mb-4" style="max-width: 500px; color: var(--text-color);">
+                                Based on your recent health data, we've analyzed potential risks across multiple disease categories. This score represents your overall health stability.
+                            </p>
+                            <div class="d-flex gap-3">
+                                <div class="d-flex align-items-center">
+                                    <div style="width: 12px; height: 12px; background: #10b981; border-radius: 50%; margin-right: 8px;"></div>
+                                    <span class="text-sm" style="color: var(--text-color);">Low Risk</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <div style="width: 12px; height: 12px; background: #f59e0b; border-radius: 50%; margin-right: 8px;"></div>
+                                    <span class="text-sm" style="color: var(--text-color);">Medium Risk</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <div style="width: 12px; height: 12px; background: #ef4444; border-radius: 50%; margin-right: 8px;"></div>
+                                    <span class="text-sm" style="color: var(--text-color);">High Risk</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 p-5 d-flex align-items-center justify-content-center border-start" style="background-color: var(--light-color); border-color: var(--card-border) !important;">
+                            <div class="text-center">
+                                <div class="overall-score-display mb-3" id="scoreCircle">
+                                    <div class="overall-score-inner">
+                                        <h1 class="display-4 fw-bold mb-0" id="overallScore" style="color: var(--primary-color); letter-spacing: -2px;">--</h1>
+                                        <small class="fw-bold" style="color: var(--text-color);">SCORE</small>
+                                    </div>
+                                </div>
+                                <p class="mb-0 fw-medium" style="color: var(--text-color);">Health Risk Index</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disease-Specific Assessments -->
+    <div class="row mb-4">
+        <div class="col-12 mb-4">
+            <h4 class="fw-bold" style="color: var(--heading-color);">Disease Risk Breakdown</h4>
+        </div>
+        <div id="riskAssessments" class="col-12">
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-2 text-muted">Analyzing health markers...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Priority Actions -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm" style="background-color: var(--card-bg);">
+                <div class="card-header py-3" style="background-color: var(--card-bg); border-bottom: 1px solid var(--card-border);">
+                    <h5 class="mb-0 fw-bold" style="color: var(--heading-color);">
+                        <i class="fas fa-clipboard-check me-2 text-primary"></i> Recommended Actions
+                    </h5>
+                </div>
+                <div class="card-body p-0" id="priorityActions">
+                    <p class="text-muted p-4">Loading recommendations...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Recommendations -->
+    <div class="row mb-4">
+        <div class="col-12 mb-4">
+            <h4 class="fw-bold" style="color: var(--heading-color);">Detailed Strategy</h4>
+        </div>
+        <div id="detailedRecommendations" class="col-12">
+            <p class="text-muted">Loading strategy...</p>
+        </div>
+    </div>
+    
+    <!-- Data Completeness -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm" style="background-color: var(--card-bg);">
+                <div class="card-body p-4">
+                     <h5 class="mb-4 fw-bold" style="color: var(--heading-color);">Data Profile Completeness</h5>
+                     <div id="dataCompleteness"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Preview Data for UI Development/Demo
+    const previewData = {
+        report_date: new Date().toISOString(),
+        overall_risk_score: 78,
+        risk_assessments: {
+            cardiac: {
+                risk_level: 'medium',
+                risk_score: 45,
+                confidence: 'High',
+                contributing_factors: ['Elevated BP', 'Sedentary Lifestyle', 'Family History'],
+                recommendations: ['Schedule a cardiologist consultation', 'Start moderate cardio exercise']
+            },
+            diabetes: {
+                risk_level: 'high',
+                risk_score: 82,
+                confidence: 'Medium',
+                contributing_factors: ['High BMI', 'Age > 45', 'Unhealthy Diet'],
+                recommendations: ['Check fasting blood sugar', 'Reduce sugar intake immediately']
+            },
+            hypertension: {
+                risk_level: 'low',
+                risk_score: 15,
+                confidence: 'High',
+                contributing_factors: ['None significant'],
+                recommendations: ['Maintain current healthy lifestyle']
+            },
+             liver_disease: {
+                risk_level: 'medium',
+                risk_score: 55,
+                confidence: 'Medium',
+                contributing_factors: ['Alcohol consumption', 'Medication history'],
+                recommendations: ['Liver function test recommended', 'Hydration increase']
+            }
+        },
+        priority_actions: [
+            { urgency: 'high', action: 'Consult Endocrinologist for Diabetes Screening', disease: 'diabetes', risk_score: 82 },
+            { urgency: 'medium', action: 'Monitor Blood Pressure Weekly', disease: 'cardiac', risk_score: 45 },
+            { urgency: 'medium', action: 'Schedule Liver Function Test', disease: 'liver_disease', risk_score: 55 }
+        ],
+        detailed_recommendations: {
+            medical: ['Schedule HbA1c test', 'Consult for lipid profile review', 'Liver enzymes check'],
+            lifestyle: ['Aim for 150 mins moderate exercise/week', 'Reduce sodium intake to <2300mg/day', 'Follow Mediterranean diet'],
+            monitoring: ['Daily blood glucose monitoring', 'Weekly weight check', 'Monthly BP log'],
+            prevention: ['Stress management techniques', 'Sleep hygiene improvement (7-8 hours)']
+        },
+        data_completeness: {
+            cardiac: 100,
+            diabetes: 85,
+            hypertension: 100,
+            liver_disease: 60,
+            mental_health: 40
+        }
+    };
+
+    let currentReport = null;
+
+    // Check if we are in preview mode (e.g. no auth or explicitly requested)
+    const isPreview = true; // Force preview for now since user has no keys
+
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            loadRiskReport();
+        } else {
+            if (isPreview) {
+                console.log('Running in Preview Mode');
+                currentReport = previewData;
+                displayReport(previewData);
+            } else {
+                window.location.href = '/';
+            }
+        }
+    });
+
+    async function loadRiskReport() {
+        try {
+            const result = await apiCall('/api/assessment/latest');
+            
+            if (result.success && result.report) {
+                currentReport = result.report;
+                displayReport(result.report);
+            } else {
+                // If no report found on server, maybe show preview data if allowed, or empty state
+                if (isPreview) {
+                     currentReport = previewData;
+                     displayReport(previewData);
+                } else {
+                    document.getElementById('riskAssessments').innerHTML = `
+                        <div class="text-center py-5">
+                            <i class="fas fa-exclamation-circle fa-4x text-warning mb-3"></i>
+                            <h4>No Risk Assessment Found</h4>
+                            <p class="text-muted">Generate your first assessment to view a comprehensive risk report.</p>
+                            <button class="btn btn-primary btn-lg" onclick="generateNewAssessment()">
+                                <i class="fas fa-chart-line me-2"></i> Generate Assessment
+                            </button>
+                        </div>
+                    `;
+                }
+            }
+        } catch (error) {
+            console.error('Error loading report:', error);
+            if (isPreview) {
+                currentReport = previewData;
+                displayReport(previewData);
+            } else {
+                alert('Failed to load risk report');
+            }
+        }
+    }
+
+    function calculateOverallRiskScore(assessments) {
+        // Calculate dynamic overall risk score based on all disease assessments
+        let totalWeightedScore = 0;
+        let totalWeight = 0;
+        
+        const riskLevelWeights = {
+            'very_high': 1.0,
+            'high': 0.9,
+            'medium': 0.6,
+            'low': 0.3
+        };
+        
+        for (const [disease, assessment] of Object.entries(assessments)) {
+            const weight = riskLevelWeights[assessment.risk_level] || 0.5;
+            const weightedScore = assessment.risk_score * weight;
+            
+            totalWeightedScore += weightedScore;
+            totalWeight += weight;
+        }
+        
+        // Return the weighted average, rounded to nearest integer
+        const overallScore = Math.round(totalWeightedScore / totalWeight);
+        return Math.min(100, Math.max(0, overallScore)); // Ensure score is between 0-100
+    }
+
+    function displayReport(report) {
+        // Display report date
+        document.getElementById('reportDate').textContent = 
+            `Analysis generated on ${new Date(report.report_date).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`;
+        
+        // Calculate and display dynamic overall score
+        const dynamicScore = calculateOverallRiskScore(report.risk_assessments);
+        document.getElementById('overallScore').textContent = dynamicScore;
+        document.getElementById('scoreCircle').style.setProperty('--score-percent', `${dynamicScore}%`);
+        
+        // Display risk assessments
+        displayRiskAssessments(report.risk_assessments);
+        
+        // Display priority actions
+        displayPriorityActions(report.priority_actions);
+        
+        // Display detailed recommendations
+        displayDetailedRecommendations(report.detailed_recommendations);
+        
+        // Display data completeness
+        if (report.data_completeness) {
+            displayDataCompleteness(report.data_completeness);
+        }
+    }
+
+    function displayRiskAssessments(assessments) {
+        const container = document.getElementById('riskAssessments');
+        let html = '<div class="row g-4">';
+        
+        for (const [disease, assessment] of Object.entries(assessments)) {
+            const riskClass = assessment.risk_level.replace('_', '-'); // low, medium, high
+            const riskColor = getRiskColor(assessment.risk_level);
+            
+            html += `
+                <div class="col-md-6 col-lg-6">
+                    <div class="disease-card ${riskClass} h-100 position-relative">
+                        <div class="card-header-strip"></div>
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="fw-bold mb-1 text-capitalize" style="color: var(--heading-color);">${disease.replace(/_/g, ' ')}</h5>
+                                    <span class="badge" style="background-color: var(--light-color); color: var(--text-color); border: 1px solid var(--card-border);">Confidence: ${assessment.confidence}</span>
+                                </div>
+                                <div class="text-end">
+                                    <span class="display-6 fw-bold" style="color: ${riskColor}">${assessment.risk_score}%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="text-xs fw-bold" style="color: var(--text-color);">RISK LEVEL</span>
+                                    <span class="text-xs fw-bold" style="color: ${riskColor}">${assessment.risk_level.replace('_', ' ').toUpperCase()}</span>
+                                </div>
+                                <div class="progress progress-custom">
+                                    <div class="progress-bar" role="progressbar" 
+                                         style="width: ${assessment.risk_score}%; background-color: ${riskColor};"
+                                         aria-valuenow="${assessment.risk_score}" aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h6 class="text-xs text-uppercase fw-bold mb-2" style="color: var(--text-color);">Key Factors</h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    ${assessment.contributing_factors.slice(0, 3).map(factor => 
+                                        `<span class="badge" style="background-color: var(--light-color); color: var(--text-color); border: 1px solid var(--card-border); font-weight: normal;">${factor}</span>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h6 class="text-xs text-uppercase fw-bold mb-2" style="color: var(--text-color);">Recommendation</h6>
+                                <p class="text-sm mb-0" style="color: var(--text-color);"><i class="fas fa-check-circle text-success me-2"></i>${assessment.recommendations[0]}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    function displayPriorityActions(actions) {
+        const container = document.getElementById('priorityActions');
+        
+        if (!actions || actions.length === 0) {
+            container.innerHTML = '<div class="p-4 text-center"><i class="fas fa-check-circle fa-2x text-success mb-2"></i><p class="text-success mb-0 fw-medium">No immediate priority actions required.</p></div>';
+            return;
+        }
+        
+        let html = '<div class="list-group list-group-flush">';
+        
+        actions.forEach((action, index) => {
+            const isHigh = action.urgency === 'high';
+            const iconColor = isHigh ? 'text-danger' : 'text-warning';
+            const bgColor = isHigh ? 'bg-danger bg-opacity-10' : 'bg-warning bg-opacity-10';
+            
+            html += `
+                <div class="list-group-item p-4 border-bottom" style="background-color: transparent; border-color: var(--card-border) !important;">
+                    <div class="d-flex align-items-start">
+                        <div class="flex-shrink-0 mt-1">
+                            <div class="rounded-circle ${bgColor} d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="fas fa-exclamation ${iconColor}"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <h6 class="mb-0 fw-bold" style="color: var(--heading-color);">${action.action}</h6>
+                                <span class="badge ${isHigh ? 'bg-danger' : 'bg-warning text-dark'}">${action.urgency.toUpperCase()}</span>
+                            </div>
+                            <p class="mb-0 small" style="color: var(--text-color);">
+                                Related to <span class="fw-medium" style="color: var(--heading-color);">${action.disease.replace(/_/g, ' ')}</span> (Risk: ${action.risk_score}%)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    function displayDetailedRecommendations(recommendations) {
+        const container = document.getElementById('detailedRecommendations');
+        
+        const categories = [
+            { key: 'medical', title: 'Medical', icon: 'user-md', color: 'primary' },
+            { key: 'lifestyle', title: 'Lifestyle', icon: 'heartbeat', color: 'success' },
+            { key: 'monitoring', title: 'Monitoring', icon: 'chart-line', color: 'info' },
+            { key: 'prevention', title: 'Prevention', icon: 'shield-alt', color: 'secondary' }
+        ];
+        
+        let html = '<div class="row g-4">';
+        
+        categories.forEach(category => {
+            const items = recommendations[category.key] || [];
+            
+            html += `
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm" style="background-color: var(--card-bg);">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle bg-${category.color} bg-opacity-10 p-2 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-${category.icon} text-${category.color}"></i>
+                                </div>
+                                <h6 class="mb-0 fw-bold" style="color: var(--heading-color);">${category.title}</h6>
+                            </div>
+                            
+                            ${items.length > 0 ? `
+                                <ul class="list-unstyled mb-0 small">
+                                    ${items.map(item => `<li class="mb-2 d-flex align-items-start"><i class="fas fa-angle-right text-${category.color} mt-1 me-2"></i><span style="color: var(--text-color);">${item}</span></li>`).join('')}
+                                </ul>
+                            ` : '<p style="color: var(--text-color);" class="mb-0 small">No specific recommendations.</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    function displayDataCompleteness(completeness) {
+        const container = document.getElementById('dataCompleteness');
+        
+        let html = '<div class="row g-4">';
+        
+        for (const [category, percentage] of Object.entries(completeness)) {
+            const progressColor = percentage >= 80 ? 'success' : percentage >= 50 ? 'warning' : 'danger';
+            
+            html += `
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-sm fw-bold text-uppercase" style="color: var(--heading-color);">${category.replace(/_/g, ' ')}</span>
+                        <span class="text-sm fw-bold text-${progressColor}">${percentage}%</span>
+                    </div>
+                    <div class="progress" style="height: 8px; background-color: var(--light-color);">
+                        <div class="progress-bar bg-${progressColor}" role="progressbar" 
+                             style="width: ${percentage}%; border-radius: 4px;" aria-valuenow="${percentage}" 
+                             aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    function getRiskColor(riskLevel) {
+        const colors = {
+            'low': '#10b981',
+            'medium': '#f59e0b',
+            'high': '#ef4444',
+            'very_high': '#dc2626'
+        };
+        return colors[riskLevel] || '#6b7280';
+    }
+
+    async function generateNewAssessment() {
+        if (!confirm('Generate a new risk assessment? This will analyze all your health data.')) {
+            return;
+        }
+        
+        const btn = event.target;
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Analyzing...';
+        
+        // Mock generation delay for preview
+        if (isPreview) {
+            setTimeout(() => {
+                alert('Risk assessment generated successfully! (Preview Mode)');
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                // Ideally reload or update data, but for preview we just keep static data or refresh
+                location.reload(); 
+            }, 1500);
+            return;
+        }
+
+        try {
+            const result = await apiCall('/api/assessment/generate', 'POST');
+            
+            if (result.success) {
+                alert('Risk assessment generated successfully!');
+                location.reload();
+            } else {
+                alert(result.error || 'Failed to generate assessment');
+            }
+        } catch (error) {
+            console.error('Error generating assessment:', error);
+            alert('Failed to generate assessment. Please try again.');
+        } finally {
+            if (!isPreview) {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} MedWhisper {% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #3b82f6; /* Modern Blue */
+            --secondary-color: #10b981; /* Emerald */
+            --danger-color: #ef4444; /* Red */
+            --warning-color: #f59e0b; /* Amber */
+            --dark-color: #1f2937; /* Gray 800 */
+            --light-color: #ecf0f5; /* Light Blue Gray */
+            --body-bg: #f5f7fa; /* Soft Gray Blue */
+            --text-color: #2d3748; /* Deep Gray */
+            --card-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+            --card-shadow-hover: 0 12px 24px -4px rgba(0, 0, 0, 0.12), 0 6px 12px -4px rgba(0, 0, 0, 0.08);
+            --navbar-bg: #ffffff;
+            --navbar-text: #2d3748;
+            --card-bg: #ffffff;
+            --card-border: #dce4ed;
+            --footer-bg: #f8f9fb;
+            --footer-border: #dce4ed;
+            --heading-color: #1a202c;
+        }
+        
+        /* Dark mode colors */
+        [data-theme="dark"] {
+            --body-bg: #0f1419; /* Very Deep Dark */
+            --text-color: #e0e8f0; /* Light Blue Gray */
+            --navbar-bg: #1a2332;
+            --navbar-text: #e0e8f0;
+            --card-bg: #252f3f;
+            --card-border: #3a4557;
+            --footer-bg: #1a2332;
+            --footer-border: #3a4557;
+            --heading-color: #f0f4f8;
+            --light-color: #3a4557;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--heading-color);
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            transition: color 0.3s ease;
+        }
+
+        .navbar {
+            background-color: var(--navbar-bg);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .navbar-brand {
+            color: var(--primary-color) !important;
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -0.025em;
+        }
+        
+        .nav-link {
+            color: var(--navbar-text) !important;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+        
+        .card {
+            border: 1px solid var(--card-border);
+            background-color: var(--card-bg);
+            box-shadow: var(--card-shadow);
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow-hover);
+        }
+        
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #2563eb;
+            border-color: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .risk-badge {
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .risk-low {
+            background-color: #d1f2e8;
+            color: #0d6e4f;
+        }
+        
+        [data-theme="dark"] .risk-low {
+            background-color: #145a47;
+            color: #a7f3d0;
+        }
+        
+        .risk-medium {
+            background-color: #fef3c7;
+            color: #b45309;
+        }
+        
+        [data-theme="dark"] .risk-medium {
+            background-color: #78350f;
+            color: #fcd34d;
+        }
+        
+        .risk-high {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+        
+        [data-theme="dark"] .risk-high {
+            background-color: #7f1d1d;
+            color: #fca5a5;
+        }
+        
+        .risk-very-high {
+            background-color: #f87171;
+            color: #ffffff;
+        }
+        
+        [data-theme="dark"] .risk-very-high {
+            background-color: #991b1b;
+            color: #fecaca;
+        }
+        
+        footer {
+            margin-top: 4rem;
+            padding: 3rem 0;
+            background-color: var(--footer-bg);
+            color: #6b7280;
+            border-top: 1px solid var(--footer-border);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Dark mode toggle button */
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--card-border);
+            color: var(--text-color);
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1.1rem;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--card-bg);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* Utilities */
+        .text-primary { color: var(--primary-color) !important; }
+        .bg-primary { background-color: var(--primary-color) !important; }
+        .bg-light { background-color: var(--light-color) !important; }
+        .text-dark { color: var(--dark-color) !important; }
+        .text-muted { color: #718096 !important; }
+        
+        .form-control, .form-select {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border-color: var(--card-border);
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.15);
+        }
+        
+        .nav-tabs {
+            border-bottom-color: var(--card-border);
+        }
+        
+        .nav-tabs .nav-link {
+            color: var(--text-color) !important;
+            border-color: transparent;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background-color: var(--card-bg);
+            border-color: var(--card-border) var(--card-border) var(--body-bg);
+            color: var(--primary-color) !important;
+        }
+        
+        .form-label {
+            color: var(--heading-color);
+            font-weight: 500;
+        }
+        
+        .form-check-label {
+            color: var(--text-color);
+        }
+        
+        .card-title {
+            color: var(--heading-color);
+        }
+        
+        .card-text {
+            color: var(--text-color);
+        }
+        
+        .alert {
+            background-color: var(--card-bg);
+            border-color: var(--card-border);
+            color: var(--text-color);
+        }
+        
+        .alert-danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+            color: #dc2626;
+        }
+        
+        [data-theme="dark"] .alert-danger {
+            background-color: rgba(153, 27, 27, 0.3);
+            color: #fca5a5;
+        }
+        
+        .spinner-border {
+            color: var(--primary-color);
+        }
+        
+        p {
+            color: var(--text-color);
+        }
+        
+        small {
+            color: var(--text-color);
+        }
+    </style>
+    
+    <!-- Add Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-heartbeat"></i> Medwhisper
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon">Day/Night</span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/data-input">Add Data</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/risk-report">Risk Report</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                            <span id="themeIcon">🌙</span>
+                        </button>
+                    </li>
+                    <li class="nav-item" id="authSection">
+                        <button class="btn btn-outline-primary btn-sm" onclick="handleAuth()">
+                            <i class="fas fa-user"></i> <span id="authText">Sign In</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p>&copy; 2026 Medwhisper. All rights reserved.</p>
+            <p class="mb-0">
+                <small>Powered by AI & Machine Learning | For Medical Reference Only</small>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    
+    <!-- Firebase Configuration -->
+    <script>
+        // Initialize Firebase
+        // Replace with your Firebase configuration
+         const firebaseConfig = {
+    apiKey: "AIzaSyA1_73_FCN2BaY732I9ii1TFr6k5Y-fRLs",
+    authDomain: "medwhisper-2134b.firebaseapp.com",
+    projectId: "medwhisper-2134b",
+    storageBucket: "medwhisper-2134b.firebasestorage.app",
+    messagingSenderId: "356696716146",
+    appId: "1:356696716146:web:ddcbe428dd13b25d0163eb",
+    measurementId: "G-3MGX3NZRLX"
+  };
+        
+        firebase.initializeApp(firebaseConfig);
+        
+        // Auth state observer
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('authText').textContent = 'Sign Out';
+                localStorage.setItem('userId', user.uid);
+                user.getIdToken().then((token) => {
+                    localStorage.setItem('authToken', token);
+                });
+            } else {
+                document.getElementById('authText').textContent = 'Sign In';
+                localStorage.removeItem('userId');
+                localStorage.removeItem('authToken');
+            }
+        });
+        
+        function handleAuth() {
+            const user = firebase.auth().currentUser;
+            if (user) {
+                firebase.auth().signOut();
+                window.location.href = '/';
+            } else {
+                signInWithGoogle();
+            }
+        }
+        
+        function signInWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(provider)
+                .then((result) => {
+                    console.log('Sign in successful');
+                    window.location.href = '/dashboard';
+                })
+                .catch((error) => {
+                    console.error('Sign in error:', error);
+                    alert('Sign in failed: ' + error.message);
+                });
+        }
+        
+        // Helper function to make authenticated API calls
+        async function apiCall(endpoint, method = 'GET', data = null) {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                window.location.href = '/';
+                return;
+            }
+            
+            const options = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+            
+            if (data && method !== 'GET') {
+                options.body = JSON.stringify(data);
+            }
+            
+            try {
+                const response = await fetch(endpoint, options);
+                return await response.json();
+            } catch (error) {
+                console.error('API call error:', error);
+                throw error;
+            }
+        }
+        
+        // Dark Mode Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const htmlElement = document.documentElement;
+            
+            // Check for saved theme preference
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            htmlElement.setAttribute('data-theme', currentTheme);
+            themeIcon.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+            
+            // Toggle theme on button click
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    const newTheme = htmlElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                    htmlElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    themeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                });
+            }
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+    
+</body>
+</html>

@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - MedWhisper{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold" style="color: var(--heading-color);">
+                <i class="fas fa-tachometer-alt me-2"></i> Health Dashboard
+            </h2>
+            <p class="text-muted" id="welcomeMessage">Welcome back!</p>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card text-center p-4 h-100" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                <div class="card-body">
+                    <i class="fas fa-plus-circle fa-3x text-primary mb-3"></i>
+                    <h5 style="color: var(--heading-color);">Add Health Data</h5>
+                    <p class="text-muted">Input your latest lab results, lifestyle, and mental health data</p>
+                    <a href="/data-input" class="btn btn-primary">Add Data</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="card text-center p-4 h-100" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                <div class="card-body">
+                    <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                    <h5 style="color: var(--heading-color);">Generate Assessment</h5>
+                    <p class="text-muted">Get AI-powered risk assessment and recommendations</p>
+                    <button class="btn btn-success" onclick="generateAssessment()">Generate Now</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="card text-center p-4 h-100" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                <div class="card-body">
+                    <i class="fas fa-file-medical fa-3x text-info mb-3"></i>
+                    <h5 style="color: var(--heading-color);">View Report</h5>
+                    <p class="text-muted">Access your latest risk assessment report</p>
+                    <a href="/risk-report" class="btn btn-info">View Report</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Latest Risk Assessment -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                <div class="card-header" style="background-color: var(--card-bg); border-bottom-color: var(--card-border);">
+                    <h5 class="mb-0" style="color: var(--heading-color);">
+                        <i class="fas fa-clipboard-list me-2"></i> Latest Risk Assessment
+                    </h5>
+                </div>
+                <div class="card-body" id="latestAssessment">
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Loading assessment...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Health Data Summary -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                <div class="card-header" style="background-color: var(--card-bg); border-bottom-color: var(--card-border);">
+                    <h5 class="mb-0" style="color: var(--heading-color);">
+                        <i class="fas fa-database me-2"></i> Data Completeness
+                    </h5>
+                </div>
+                <div class="card-body" id="dataCompleteness">
+                    <p class="text-muted">Loading data summary...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Check authentication on page load
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            document.getElementById('welcomeMessage').textContent = `Welcome back, ${user.displayName || user.email}!`;
+            loadLatestAssessment();
+            loadDataCompleteness();
+        } else {
+            window.location.href = '/';
+        }
+    });
+
+    async function loadLatestAssessment() {
+        try {
+            const result = await apiCall('/api/assessment/latest');
+            
+            if (result.success && result.report) {
+                displayLatestAssessment(result.report);
+            } else {
+                document.getElementById('latestAssessment').innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="fas fa-exclamation-circle fa-3x text-warning mb-3"></i>
+                        <h5>No Assessment Found</h5>
+                        <p class="text-muted">Generate your first risk assessment to see results here.</p>
+                        <button class="btn btn-primary" onclick="generateAssessment()">Generate Assessment</button>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error loading assessment:', error);
+            document.getElementById('latestAssessment').innerHTML = `
+                <div class="alert alert-danger">Failed to load assessment</div>
+            `;
+        }
+    }
+
+    function calculateDynamicScore(assessments) {
+        // Calculate overall score based on disease assessments
+        let totalWeightedScore = 0;
+        let totalWeight = 0;
+        
+        const riskLevelWeights = {
+            'very_high': 1.0,
+            'high': 0.9,
+            'medium': 0.6,
+            'low': 0.3
+        };
+        
+        for (const [disease, assessment] of Object.entries(assessments)) {
+            const weight = riskLevelWeights[assessment.risk_level] || 0.5;
+            const weightedScore = assessment.risk_score * weight;
+            totalWeightedScore += weightedScore;
+            totalWeight += weight;
+        }
+        
+        return Math.round(totalWeightedScore / totalWeight);
+    }
+
+    function displayLatestAssessment(report) {
+        const assessmentDiv = document.getElementById('latestAssessment');
+        const dynamicScore = calculateDynamicScore(report.risk_assessments);
+        
+        let html = `
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p style="color: var(--text-color);"><strong>Report Date:</strong> ${new Date(report.report_date).toLocaleDateString()}</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <h4 style="color: var(--heading-color);">Overall Risk Score: <span class="badge bg-primary">${dynamicScore}%</span></h4>
+                </div>
+            </div>
+            <div class="row">
+        `;
+        
+        for (const [disease, assessment] of Object.entries(report.risk_assessments)) {
+            const riskClass = `risk-${assessment.risk_level.replace('_', '-')}`;
+            html += `
+                <div class="col-md-6 col-lg-4 mb-3">
+                    <div class="card h-100" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                        <div class="card-body">
+                            <h6 class="text-capitalize mb-2" style="color: var(--heading-color);">${disease.replace('_', ' ')}</h6>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="risk-badge ${riskClass}">${assessment.risk_level.replace('_', ' ').toUpperCase()}</span>
+                                <strong style="color: var(--text-color);">${assessment.risk_score}%</strong>
+                            </div>
+                            <small style="color: var(--text-color);">Confidence: ${assessment.confidence}</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        html += '</div>';
+        assessmentDiv.innerHTML = html;
+    }
+
+    async function loadDataCompleteness() {
+        try {
+            const result = await apiCall('/api/data/history');
+            
+            if (result.success && result.data) {
+                displayDataCompleteness(result.data);
+            }
+        } catch (error) {
+            console.error('Error loading data completeness:', error);
+        }
+    }
+
+    function displayDataCompleteness(data) {
+        const completenessDiv = document.getElementById('dataCompleteness');
+        
+        const dataTypes = [
+            { key: 'lab_data', label: 'Lab Results', icon: 'flask' },
+            { key: 'lifestyle_data', label: 'Lifestyle Data', icon: 'running' },
+            { key: 'mental_health_data', label: 'Mental Health', icon: 'brain' },
+            { key: 'family_history', label: 'Family History', icon: 'dna' }
+        ];
+        
+        let html = '<div class="row">';
+        
+        dataTypes.forEach(type => {
+            const hasData = data[type.key] && (Array.isArray(data[type.key]) ? data[type.key].length > 0 : Object.keys(data[type.key]).length > 0);
+            const iconColor = hasData ? 'success' : 'secondary';
+            const statusText = hasData ? 'Available' : 'Not Added';
+            
+            html += `
+                <div class="col-md-6 col-lg-3 mb-3">
+                    <div class="d-flex align-items-center p-3 rounded" style="background-color: var(--light-color);">
+                        <i class="fas fa-${type.icon} fa-2x text-${iconColor} me-3"></i>
+                        <div>
+                            <h6 class="mb-0" style="color: var(--heading-color);">${type.label}</h6>
+                            <small class="text-${iconColor}">${statusText}</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        completenessDiv.innerHTML = html;
+    }
+
+    async function generateAssessment() {
+        if (!confirm('Generate a new risk assessment? This will analyze all your health data.')) {
+            return;
+        }
+        
+        const btn = event.target;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Generating...';
+        
+        try {
+            const result = await apiCall('/api/assessment/generate', 'POST');
+            
+            if (result.success) {
+                alert('Risk assessment generated successfully!');
+                window.location.href = '/risk-report';
+            } else {
+                alert(result.error || 'Failed to generate assessment');
+            }
+        } catch (error) {
+            console.error('Error generating assessment:', error);
+            alert('Failed to generate assessment. Please try again.');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Generate Now';
+        }
+    }
+</script>
+{% endblock %}
