@@ -253,49 +253,7 @@ The system extracts 50+ features including:
 - CORS protection
 - Secure data storage in Firestore
 
-## 🚢 Deployment
 
-### Option 1: Local Deployment
-
-```bash
-python run.py
-```
-
-### Option 2: Production Deployment (Gunicorn)
-
-```bash
-gunicorn -w 4 -b 0.0.0.0:8000 run:app
-```
-
-### Option 3: Cloud Deployment
-
-#### Google Cloud Platform (App Engine)
-
-Create `app.yaml`:
-```yaml
-runtime: python39
-entrypoint: gunicorn -b :$PORT run:app
-
-env_variables:
-  FLASK_ENV: 'production'
-  SECRET_KEY: 'your-production-secret-key'
-```
-
-Deploy:
-```bash
-gcloud app deploy
-```
-
-#### Heroku
-
-```bash
-# Create Procfile
-echo "web: gunicorn run:app" > Procfile
-
-# Deploy
-heroku create your-app-name
-git push heroku main
-```
 
 ## 📈 Future Enhancements
 
@@ -327,7 +285,11 @@ This project is licensed under the MIT License.
 
 ## 👥 Team
 
+<<<<<<< Updated upstream
 GDG_KRAKENTECH
+=======
+Team KrakenTech
+>>>>>>> Stashed changes
 
 ## 📞 Support
 

@@ -29,3 +29,6 @@ waitress==2.1.2
 
 # Development
 pytest==7.4.3
+
+# Google Gemini AI
+google-genai==1.0.0

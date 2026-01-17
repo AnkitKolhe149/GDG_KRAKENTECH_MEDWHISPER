@@ -10,6 +10,8 @@ from app.utils.preprocess import (
     validate_mental_health_data, sanitize_input
 )
 import logging
+import requests
+import math
 
 logger = logging.getLogger(__name__)
 
@@ -481,3 +483,203 @@ def not_found(error):
 @api_bp.errorhandler(500)
 def internal_error(error):
     return jsonify({'error': 'Internal server error'}), 500
+
+
+# ========== Gemini Chatbot Endpoint ==========
+
+@api_bp.route('/chat/gemini', methods=['POST'])
+def chat_with_gemini():
+    """Chat with Google Gemini AI for health-related queries"""
+    try:
+        from google import genai
+        from google.genai import types
+        
+        data = request.get_json()
+        user_message = data.get('message', '').strip()
+        
+        if not user_message:
+            return jsonify({'error': 'Message is required'}), 400
+        
+        api_key = current_app.config.get('GEMINI_API_KEY')
+        if not api_key:
+            return jsonify({'error': 'Gemini API not configured'}), 500
+        
+        # Initialize client
+        client = genai.Client(api_key=api_key)
+        
+        # Add context for medical assistant
+        system_instruction = """You are a helpful medical information assistant for MedWhisper, 
+        a healthcare risk assessment platform. Provide accurate, empathetic health information. 
+        Always remind users to consult healthcare professionals for medical decisions. 
+        Keep responses concise and clear."""
+        
+        # Try different models in order of preference
+        models_to_try = ['gemini-1.5-flash', 'gemini-2.5-flash', 'gemini-2.0-flash-exp']
+        
+        last_error = None
+        for model_name in models_to_try:
+            try:
+                # Generate response
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=user_message,
+                    config=types.GenerateContentConfig(
+                        system_instruction=system_instruction,
+                        temperature=0.7
+                    )
+                )
+                
+                return jsonify({
+                    'success': True,
+                    'response': response.text,
+                    'message': user_message,
+                    'model': model_name
+                })
+            except Exception as model_error:
+                last_error = model_error
+                logger.warning(f'Model {model_name} failed: {str(model_error)[:100]}')
+                continue
+        
+        # If all models failed, return appropriate error
+        error_str = str(last_error)
+        if '429' in error_str or 'quota' in error_str.lower():
+            return jsonify({
+                'error': 'API quota exceeded. Please try again in a few minutes or check your Gemini API plan.',
+                'type': 'quota_exceeded'
+            }), 429
+        else:
+            raise last_error
+        
+    except ImportError:
+        logger.error('google-genai package not installed')
+        return jsonify({'error': 'Gemini SDK not installed. Run: pip install google-genai'}), 500
+    except Exception as e:
+        logger.error(f'Gemini chat error: {e}')
+        return jsonify({'error': 'Failed to get response from Gemini. Please try again later.'}), 500
+
+
+# ========== Doctors Search (External API Integration) ==========
+
+def _haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    R = 6371.0
+    phi1 = math.radians(lat1)
+    phi2 = math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlambda = math.radians(lon2 - lon1)
+    a = math.sin(dphi/2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda/2) ** 2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    return R * c
+
+
+def _extract_coords(doctor: dict):
+    # try common patterns for coordinates
+    for lat_key, lon_key in (("lat", "lon"), ("lat", "lng"), ("latitude", "longitude")):
+        if lat_key in doctor and lon_key in doctor:
+            try:
+                return float(doctor[lat_key]), float(doctor[lon_key])
+            except Exception:
+                pass
+    for loc_key in ("location", "geo", "address", "coordinates"):
+        loc = doctor.get(loc_key)
+        if isinstance(loc, dict):
+            for lat_key, lon_key in (("lat", "lon"), ("lat", "lng"), ("latitude", "longitude")):
+                if lat_key in loc and lon_key in loc:
+                    try:
+                        return float(loc[lat_key]), float(loc[lon_key])
+                    except Exception:
+                        pass
+    return None
+
+
+def _geocode_area(area_query: str):
+    try:
+        url = "https://nominatim.openstreetmap.org/search"
+        params = {"q": area_query, "format": "json", "limit": 1}
+        headers = {"User-Agent": "MedWhisper/1.0"}
+        resp = requests.get(url, params=params, headers=headers, timeout=10)
+        resp.raise_for_status()
+        results = resp.json()
+        if results:
+            return float(results[0]["lat"]), float(results[0]["lon"])  # type: ignore[index]
+    except Exception as e:
+        logger.error(f"Geocoding failed: {e}")
+    return None
+
+
+@api_bp.route('/doctors/search', methods=['GET'])
+def search_doctors():
+    """Search doctors near an area or coordinates within a radius.
+
+    Query params:
+      - area: Optional free-text location (city, address, postal code)
+      - lat: Optional latitude
+      - lon: Optional longitude
+      - radius_km: Optional radius in kilometers (default: 20)
+    """
+    try:
+        # Hardcode location as Nagpur
+        area = 'Nagpur'
+        # Use static coordinates to avoid geocoding dependency
+        # Nagpur approx coordinates
+        lat = 21.1458
+        lon = 79.0882
+        radius_km = request.args.get('radius_km', default=20.0, type=float)
+
+        base_url = current_app.config.get('DOCTORS_API_BASE_URL', 'https://doctorsapi.com/api')
+        api_key = current_app.config.get('DOCTORS_API_KEY')
+        if not api_key:
+            return jsonify({'error': 'Missing DOCTORS_API_KEY in environment'}), 500
+
+        # lat/lon already set to static coordinates for Nagpur
+
+        # Try remote filtering if supported
+        headers = {"api-key": api_key}
+        params = {"lat": lat, "lon": lon, "radius_km": radius_km}
+        doctors: list = []
+        try:
+            resp = requests.get(f"{base_url}/doctors", headers=headers, params=params, timeout=10)
+            resp.raise_for_status()
+            data = resp.json()
+            if isinstance(data, list):
+                doctors = data
+            elif isinstance(data, dict):
+                for key in ("data", "results", "items", "doctors"):
+                    if key in data and isinstance(data[key], list):
+                        doctors = data[key]
+                        break
+        except Exception as e:
+            logger.warning(f"Remote filter failed or unsupported, falling back to local: {e}")
+
+        # Fallback: fetch and locally filter by distance
+        if not doctors:
+            try:
+                resp_all = requests.get(f"{base_url}/doctors", headers=headers, timeout=10)
+                resp_all.raise_for_status()
+                all_data = resp_all.json()
+                doctors = all_data if isinstance(all_data, list) else all_data.get('data', [])
+            except Exception as e:
+                logger.error(f"Fetching doctors failed: {e}")
+                return jsonify({'error': 'Failed to fetch doctors'}), 502
+
+            filtered = []
+            for doc in doctors:
+                coords = _extract_coords(doc)
+                if not coords:
+                    continue
+                d_km = _haversine_km(lat, lon, coords[0], coords[1])
+                if d_km <= radius_km:
+                    item = dict(doc)
+                    item['distance_km'] = round(d_km, 2)
+                    filtered.append(item)
+            doctors = sorted(filtered, key=lambda d: d.get('distance_km', radius_km))
+
+        return jsonify({
+            'success': True,
+            'count': len(doctors),
+            'radius_km': radius_km,
+            'area': area,
+            'results': doctors
+        })
+    except Exception as e:
+        logger.error(f"Error searching doctors: {e}")
+        return jsonify({'error': 'Failed to search doctors'}), 500
