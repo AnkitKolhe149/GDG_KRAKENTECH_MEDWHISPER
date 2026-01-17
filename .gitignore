@@ -8,6 +8,27 @@ venv/
 env/
 ENV/
 .venv
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
 
 # Flask
 instance/
@@ -15,8 +36,10 @@ instance/
 
 # Environment variables
 .env
+.env.local
+.env.*.local
 
-# Firebase
+# Firebase (credentials are sensitive)
 firebase-credentials.json
 *-firebase-adminsdk-*.json
 
@@ -26,10 +49,14 @@ firebase-credentials.json
 *.swp
 *.swo
 *~
+.DS_Store
 
-# Logs
+# Logs & Temp
 logs/
 *.log
+*.tmp
+*.temp
+app_*.log
 
 # Data
 # data/raw/*
@@ -37,17 +64,46 @@ logs/
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 
-# Models
+# Machine Learning Models (too large for git/Vercel)
 models_store/*.pkl
 models_store/*.joblib
+models_store/*.pth
 !models_store/.gitkeep
+
+# Large asset files
+app/static/images/*.png
+app/static/images/*.jpg
+app/static/images/*.jpeg
+!app/static/images/favicon.ico
 
 # OS
 .DS_Store
 Thumbs.db
+*.DS_Store
 
 # Testing
 .pytest_cache/
+.coverage
+htmlcov/
+
+# IDE Cache
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Node (if applicable)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Virtual environments in repo
+.venv/
+venv/
+env/
+
+# Vercel specific
+.vercel/
+.vercelignore
 .coverage
 htmlcov/
 
