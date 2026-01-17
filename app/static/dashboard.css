@@ -1,0 +1,505 @@
+/* ===============================
+   DASHBOARD PAGE STYLES
+   =============================== */
+
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --dark-glass-bg: rgba(37, 47, 63, 0.4);
+}
+
+[data-theme="dark"] {
+    --glass-bg: rgba(26, 35, 50, 0.6);
+    --glass-border: rgba(58, 69, 87, 0.3);
+    --dark-glass-bg: rgba(15, 20, 25, 0.5);
+}
+
+/* ===============================
+   PAGE HEADER
+   =============================== */
+
+#welcomeMessage {
+    color: var(--text-color);
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* ===============================
+   QUICK ACTION CARDS
+   =============================== */
+
+.quick-action-card {
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255, 255, 255, 0.5) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 1.25rem;
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    height: 100%;
+}
+
+[data-theme="dark"] .quick-action-card {
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(26, 35, 50, 0.4) 100%);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.quick-action-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+    opacity: 0.05;
+    border-radius: 50%;
+    transition: all 0.6s ease;
+}
+
+.quick-action-card:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 20px 60px 0 rgba(59, 130, 246, 0.25);
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.quick-action-card:hover::before {
+    transform: translate(20px, 20px);
+    opacity: 0.12;
+}
+
+.quick-action-card .card-body {
+    position: relative;
+    z-index: 1;
+    padding: 0;
+}
+
+.quick-action-card i {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.4s ease;
+    display: inline-block;
+}
+
+.quick-action-card:hover i {
+    transform: rotateY(360deg) scale(1.15);
+}
+
+.quick-action-card h5 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--heading-color);
+    letter-spacing: -0.5px;
+}
+
+.quick-action-card p {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.quick-action-card .btn {
+    border-radius: 0.75rem;
+    font-weight: 700;
+    padding: 0.75rem 1.75rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.quick-action-card .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.quick-action-card .btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* ===============================
+   LATEST ASSESSMENT SECTION
+   =============================== */
+
+.assessment-card-container {
+    background: linear-gradient(135deg, var(--card-bg) 0%, var(--card-bg) 100%);
+    backdrop-filter: blur(20px);
+    border: 2px solid var(--card-border);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 20px 60px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+}
+
+[data-theme="dark"] .assessment-card-container {
+    box-shadow: 0 20px 60px 0 rgba(0, 0, 0, 0.4);
+}
+
+.assessment-card-container:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 25px 75px 0 rgba(59, 130, 246, 0.2);
+}
+
+.assessment-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #2563eb 100%);
+    color: white;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.assessment-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.assessment-header h5 {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.assessment-body {
+    padding: 2rem;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.report-date-info {
+    color: var(--text-color);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.overall-score-badge {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #2563eb 100%);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: inline-block;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+    transition: all 0.3s ease;
+}
+
+.overall-score-badge:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.4);
+}
+
+/* Disease Assessment Cards */
+.disease-assessment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.disease-card-item {
+    background: linear-gradient(135deg, var(--light-color) 0%, var(--body-bg) 100%);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.disease-card-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.disease-card-item:hover {
+    transform: translateY(-8px) rotateX(5deg);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.disease-card-item:hover::before {
+    left: 100%;
+}
+
+.disease-name {
+    font-weight: 700;
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+    text-transform: capitalize;
+    letter-spacing: 0.3px;
+}
+
+.risk-score-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.risk-score-number {
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.disease-confidence {
+    font-size: 0.85rem;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+/* ===============================
+   DATA COMPLETENESS SECTION
+   =============================== */
+
+.data-completeness-container {
+    background: linear-gradient(135deg, var(--card-bg) 0%, var(--card-bg) 100%);
+    backdrop-filter: blur(20px);
+    border: 2px solid var(--card-border);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 20px 60px 0 rgba(0, 0, 0, 0.1);
+}
+
+.completeness-header {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 2rem;
+    position: relative;
+}
+
+.completeness-header h5 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.completeness-body {
+    padding: 2rem;
+}
+
+.data-type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.data-type-item {
+    background: linear-gradient(135deg, var(--light-color) 0%, var(--body-bg) 100%);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.data-type-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.data-type-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.data-type-item:hover::after {
+    opacity: 1;
+}
+
+.data-icon {
+    font-size: 2rem;
+    min-width: 50px;
+    text-align: center;
+    transition: all 0.4s ease;
+}
+
+.data-type-item:hover .data-icon {
+    transform: scale(1.2) rotate(10deg);
+}
+
+.data-info {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+}
+
+.data-label {
+    font-weight: 700;
+    color: var(--heading-color);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.3px;
+}
+
+.data-status {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-available {
+    color: #10b981;
+}
+
+.status-not-added {
+    color: #6b7280;
+    opacity: 0.7;
+}
+
+/* ===============================
+   LOADING SPINNER ENHANCEMENT
+   =============================== */
+
+.assessment-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    gap: 1.5rem;
+}
+
+.spinner-border {
+    width: 60px;
+    height: 60px;
+    border-width: 4px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* ===============================
+   ANIMATIONS
+   =============================== */
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.quick-action-card {
+    animation: slideInUp 0.6s ease-out forwards;
+}
+
+.quick-action-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.quick-action-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.quick-action-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.assessment-card-container {
+    animation: slideInUp 0.6s ease-out 0.4s forwards;
+    animation-fill-mode: both;
+}
+
+.data-completeness-container {
+    animation: slideInUp 0.6s ease-out 0.5s forwards;
+    animation-fill-mode: both;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 768px) {
+    .quick-action-card {
+        padding: 1.5rem;
+    }
+    
+    .quick-action-card i {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .quick-action-card h5 {
+        font-size: 1.1rem;
+    }
+    
+    .assessment-header,
+    .completeness-header {
+        padding: 1.5rem;
+    }
+    
+    .assessment-body,
+    .completeness-body {
+        padding: 1.5rem;
+    }
+    
+    .data-type-grid,
+    .disease-assessment-grid {
+        grid-template-columns: 1fr;
+    }
+}
+

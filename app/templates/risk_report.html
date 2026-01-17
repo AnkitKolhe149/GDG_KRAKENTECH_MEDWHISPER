@@ -3,73 +3,7 @@
 {% block title %}Risk Report - MedWhisper{% endblock %}
 
 {% block extra_css %}
-<style>
-    .disease-card {
-        border: 1px solid var(--card-border);
-        border-radius: 1rem;
-        transition: all 0.3s ease;
-        background: var(--card-bg);
-        overflow: hidden;
-    }
-    .disease-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-    }
-    .disease-card .card-header-strip {
-        height: 6px;
-        width: 100%;
-    }
-    .disease-card.low .card-header-strip { background-color: #10b981; }
-    .disease-card.medium .card-header-strip { background-color: #f59e0b; }
-    .disease-card.high .card-header-strip { background-color: #ef4444; }
-    .disease-card.very-high .card-header-strip { background-color: #dc2626; }
-    
-    .progress-custom {
-        height: 12px;
-        background-color: var(--light-color);
-        border-radius: 9999px;
-        overflow: hidden;
-        margin-top: 0.5rem;
-    }
-    .progress-bar {
-        border-radius: 9999px;
-    }
-
-    .stat-card {
-        background: var(--card-bg);
-        border-radius: 1rem;
-        padding: 2rem;
-        text-align: center;
-        border: 1px solid var(--card-border);
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    .overall-score-display {
-        position: relative;
-        width: 150px;
-        height: 150px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto;
-        border-radius: 50%;
-        background: conic-gradient(var(--primary-color) var(--score-percent), var(--light-color) 0);
-    }
-    .overall-score-inner {
-        width: 130px;
-        height: 130px;
-        background: var(--card-bg);
-        border-radius: 50%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='risk_report.css') }}">
 {% endblock %}
 
 {% block content %}

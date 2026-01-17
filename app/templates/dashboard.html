@@ -2,23 +2,33 @@
 
 {% block title %}Dashboard - MedWhisper{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+<style>
+    body {
+        perspective: 1000px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container py-5">
-    <div class="row mb-4">
+    <!-- Page Header -->
+    <div class="row mb-5">
         <div class="col-12">
-            <h2 class="fw-bold" style="color: var(--heading-color);">
-                <i class="fas fa-tachometer-alt me-2"></i> Health Dashboard
+            <h2 class="fw-bold" style="color: var(--heading-color); font-size: 2.5rem; letter-spacing: -1px;">
+                <i class="fas fa-tachometer-alt me-3"></i> Health Dashboard
             </h2>
-            <p class="text-muted" id="welcomeMessage">Welcome back!</p>
+            <p class="text-muted" id="welcomeMessage" style="font-size: 1.1rem;">Welcome back!</p>
         </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="row mb-4">
-        <div class="col-md-4 mb-3">
-            <div class="card text-center p-4 h-100" style="background-color: var(--card-bg); border-color: var(--card-border);">
+    <!-- Quick Actions Cards -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="quick-action-card card">
                 <div class="card-body">
-                    <i class="fas fa-plus-circle fa-3x text-primary mb-3"></i>
+                    <i class="fas fa-plus-circle text-primary"></i>
                     <h5 style="color: var(--heading-color);">Add Health Data</h5>
                     <p class="text-muted">Input your latest lab results, lifestyle, and mental health data</p>
                     <a href="/data-input" class="btn btn-primary">Add Data</a>
@@ -26,10 +36,10 @@
             </div>
         </div>
         
-        <div class="col-md-4 mb-3">
-            <div class="card text-center p-4 h-100" style="background-color: var(--card-bg); border-color: var(--card-border);">
+        <div class="col-md-4 mb-4">
+            <div class="quick-action-card card">
                 <div class="card-body">
-                    <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                    <i class="fas fa-chart-line text-success"></i>
                     <h5 style="color: var(--heading-color);">Generate Assessment</h5>
                     <p class="text-muted">Get AI-powered risk assessment and recommendations</p>
                     <button class="btn btn-success" onclick="generateAssessment()">Generate Now</button>
@@ -37,10 +47,10 @@
             </div>
         </div>
         
-        <div class="col-md-4 mb-3">
-            <div class="card text-center p-4 h-100" style="background-color: var(--card-bg); border-color: var(--card-border);">
+        <div class="col-md-4 mb-4">
+            <div class="quick-action-card card">
                 <div class="card-body">
-                    <i class="fas fa-file-medical fa-3x text-info mb-3"></i>
+                    <i class="fas fa-file-medical text-info"></i>
                     <h5 style="color: var(--heading-color);">View Report</h5>
                     <p class="text-muted">Access your latest risk assessment report</p>
                     <a href="/risk-report" class="btn btn-info">View Report</a>
@@ -50,37 +60,42 @@
     </div>
 
     <!-- Latest Risk Assessment -->
-    <div class="row mb-4">
+    <div class="row mb-5">
         <div class="col-12">
-            <div class="card" style="background-color: var(--card-bg); border-color: var(--card-border);">
-                <div class="card-header" style="background-color: var(--card-bg); border-bottom-color: var(--card-border);">
-                    <h5 class="mb-0" style="color: var(--heading-color);">
+            <div class="card assessment-card-container">
+                <div class="assessment-header">
+                    <h5>
                         <i class="fas fa-clipboard-list me-2"></i> Latest Risk Assessment
                     </h5>
                 </div>
-                <div class="card-body" id="latestAssessment">
-                    <div class="text-center py-4">
+                <div class="assessment-body" id="latestAssessment">
+                    <div class="assessment-loading">
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
-                        <p class="mt-2">Loading assessment...</p>
+                        <p class="loading-text">Analyzing your health data...</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Health Data Summary -->
+    <!-- Health Data Completeness -->
     <div class="row">
         <div class="col-12">
-            <div class="card" style="background-color: var(--card-bg); border-color: var(--card-border);">
-                <div class="card-header" style="background-color: var(--card-bg); border-bottom-color: var(--card-border);">
-                    <h5 class="mb-0" style="color: var(--heading-color);">
+            <div class="card data-completeness-container">
+                <div class="completeness-header">
+                    <h5>
                         <i class="fas fa-database me-2"></i> Data Completeness
                     </h5>
                 </div>
-                <div class="card-body" id="dataCompleteness">
-                    <p class="text-muted">Loading data summary...</p>
+                <div class="completeness-body" id="dataCompleteness">
+                    <div class="assessment-loading">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="loading-text">Loading data summary...</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -109,11 +124,13 @@
                 displayLatestAssessment(result.report);
             } else {
                 document.getElementById('latestAssessment').innerHTML = `
-                    <div class="text-center py-4">
-                        <i class="fas fa-exclamation-circle fa-3x text-warning mb-3"></i>
-                        <h5>No Assessment Found</h5>
-                        <p class="text-muted">Generate your first risk assessment to see results here.</p>
-                        <button class="btn btn-primary" onclick="generateAssessment()">Generate Assessment</button>
+                    <div class="assessment-loading">
+                        <i class="fas fa-exclamation-circle fa-4x text-warning mb-3" style="opacity: 0.8;"></i>
+                        <h5 style="color: var(--heading-color); margin: 0;">No Assessment Found</h5>
+                        <p class="text-muted mt-2">Generate your first risk assessment to see results here.</p>
+                        <button class="btn btn-primary mt-3" onclick="generateAssessment()">
+                            <i class="fas fa-flask me-2"></i> Generate Assessment
+                        </button>
                     </div>
                 `;
             }
@@ -152,31 +169,27 @@
         const dynamicScore = calculateDynamicScore(report.risk_assessments);
         
         let html = `
-            <div class="row mb-3">
+            <div class="row mb-4 pb-4" style="border-bottom: 2px solid var(--card-border);">
                 <div class="col-md-6">
-                    <p style="color: var(--text-color);"><strong>Report Date:</strong> ${new Date(report.report_date).toLocaleDateString()}</p>
+                    <p class="report-date-info"><strong>Report Date:</strong> ${new Date(report.report_date).toLocaleDateString()}</p>
                 </div>
-                <div class="col-md-6 text-end">
-                    <h4 style="color: var(--heading-color);">Overall Risk Score: <span class="badge bg-primary">${dynamicScore}%</span></h4>
+                <div class="col-md-6 text-md-end">
+                    <h4 style="color: var(--heading-color); margin: 0;">Overall Risk Score: <span class="overall-score-badge">${dynamicScore}%</span></h4>
                 </div>
             </div>
-            <div class="row">
+            <div class="disease-assessment-grid">
         `;
         
         for (const [disease, assessment] of Object.entries(report.risk_assessments)) {
             const riskClass = `risk-${assessment.risk_level.replace('_', '-')}`;
             html += `
-                <div class="col-md-6 col-lg-4 mb-3">
-                    <div class="card h-100" style="background-color: var(--card-bg); border-color: var(--card-border);">
-                        <div class="card-body">
-                            <h6 class="text-capitalize mb-2" style="color: var(--heading-color);">${disease.replace('_', ' ')}</h6>
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="risk-badge ${riskClass}">${assessment.risk_level.replace('_', ' ').toUpperCase()}</span>
-                                <strong style="color: var(--text-color);">${assessment.risk_score}%</strong>
-                            </div>
-                            <small style="color: var(--text-color);">Confidence: ${assessment.confidence}</small>
-                        </div>
+                <div class="disease-card-item">
+                    <div class="disease-name">${disease.replace('_', ' ')}</div>
+                    <div class="risk-score-container">
+                        <span class="risk-badge ${riskClass}">${assessment.risk_level.replace('_', ' ').toUpperCase()}</span>
+                        <span class="risk-score-number">${assessment.risk_score}%</span>
                     </div>
+                    <div class="disease-confidence">Confidence: ${assessment.confidence}</div>
                 </div>
             `;
         }
@@ -207,21 +220,20 @@
             { key: 'family_history', label: 'Family History', icon: 'dna' }
         ];
         
-        let html = '<div class="row">';
+        let html = '<div class="data-type-grid">';
         
         dataTypes.forEach(type => {
             const hasData = data[type.key] && (Array.isArray(data[type.key]) ? data[type.key].length > 0 : Object.keys(data[type.key]).length > 0);
             const iconColor = hasData ? 'success' : 'secondary';
             const statusText = hasData ? 'Available' : 'Not Added';
+            const statusClass = hasData ? 'status-available' : 'status-not-added';
             
             html += `
-                <div class="col-md-6 col-lg-3 mb-3">
-                    <div class="d-flex align-items-center p-3 rounded" style="background-color: var(--light-color);">
-                        <i class="fas fa-${type.icon} fa-2x text-${iconColor} me-3"></i>
-                        <div>
-                            <h6 class="mb-0" style="color: var(--heading-color);">${type.label}</h6>
-                            <small class="text-${iconColor}">${statusText}</small>
-                        </div>
+                <div class="data-type-item">
+                    <i class="fas fa-${type.icon} fa-2x text-${iconColor} data-icon"></i>
+                    <div class="data-info">
+                        <div class="data-label">${type.label}</div>
+                        <div class="data-status ${statusClass}">${statusText}</div>
                     </div>
                 </div>
             `;

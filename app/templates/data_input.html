@@ -2,37 +2,41 @@
 
 {% block title %}Add Health Data - MedWhisper{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='data_input.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="container py-5">
     <div class="row mb-4">
         <div class="col-12">
-            <h2 class="fw-bold" style="color: var(--heading-color);">
+            <h2 class="fw-bold page-title">
                 <i class="fas fa-edit me-2"></i> Add Health Data
             </h2>
-            <p style="color: var(--text-color);">Enter your health information for accurate risk assessment</p>
-            <div id="dataValidationMessage" style="display: none;"></div>
+            <p class="page-subtitle">Enter your health information for accurate risk assessment</p>
+            <div id="dataValidationMessage" class="validation-message"></div>
         </div>
     </div>
 
     <!-- Tab Navigation -->
-    <ul class="nav nav-tabs mb-4" role="tablist" style="border-bottom-color: var(--card-border);">
+    <ul class="nav nav-tabs mb-4 tab-navigation" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" data-bs-toggle="tab" href="#labData" style="color: var(--text-color);">
+            <a class="nav-link active tab-link" data-bs-toggle="tab" href="#labData">
                 <i class="fas fa-flask me-2"></i> Lab Results
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#lifestyleData" style="color: var(--text-color);">
+            <a class="nav-link tab-link" data-bs-toggle="tab" href="#lifestyleData">
                 <i class="fas fa-running me-2"></i> Lifestyle
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#mentalHealthData" style="color: var(--text-color);">
+            <a class="nav-link tab-link" data-bs-toggle="tab" href="#mentalHealthData">
                 <i class="fas fa-brain me-2"></i> Mental Health
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#familyHistory" style="color: var(--text-color);">
+            <a class="nav-link tab-link" data-bs-toggle="tab" href="#familyHistory">
                 <i class="fas fa-dna me-2"></i> Family History
             </a>
         </li>
@@ -42,9 +46,9 @@
     <div class="tab-content">
         <!-- Lab Data Form -->
         <div class="tab-pane fade show active" id="labData">
-            <div class="card" style="background-color: var(--card-bg); border-color: var(--card-border);">
-                <div class="card-body" style="color: var(--text-color);">
-                    <form id="labDataForm">
+            <div class="card form-card">
+                <div class="card-body form-card-body">
+                    <form id="labDataForm" class="data-form">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Test Date *</label>
@@ -97,9 +101,9 @@
 
         <!-- Lifestyle Data Form -->
         <div class="tab-pane fade" id="lifestyleData">
-            <div class="card" style="background-color: var(--card-bg); border-color: var(--card-border);">
-                <div class="card-body" style="color: var(--text-color);">
-                    <form id="lifestyleDataForm">
+            <div class="card form-card">
+                <div class="card-body form-card-body">
+                    <form id="lifestyleDataForm" class="data-form">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Date *</label>
@@ -163,9 +167,9 @@
 
         <!-- Mental Health Data Form -->
         <div class="tab-pane fade" id="mentalHealthData">
-            <div class="card" style="background-color: var(--card-bg); border-color: var(--card-border);">
-                <div class="card-body" style="color: var(--text-color);">
-                    <form id="mentalHealthDataForm">
+            <div class="card form-card">
+                <div class="card-body form-card-body">
+                    <form id="mentalHealthDataForm" class="data-form">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Date *</label>
@@ -220,71 +224,112 @@
 
         <!-- Family History Form -->
         <div class="tab-pane fade" id="familyHistory">
-            <div class="card" style="background-color: var(--card-bg); border-color: var(--card-border);">
-                <div class="card-body" style="color: var(--text-color);">
-                    <form id="familyHistoryForm">
-                        <p class="text-muted mb-4">Check any conditions present in your immediate family (parents, siblings, grandparents)</p>
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">Diabetes</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="diabetes" value="parent">
-                                <label class="form-check-label">Parent(s)</label>
+            <div class="card form-card">
+                <div class="card-body form-card-body">
+                    <form id="familyHistoryForm" class="data-form">
+                        <p class="family-history-description">Check any conditions present in your immediate family (parents, siblings, grandparents)</p>
+                        
+                        <!-- Diabetes -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <label class="form-label fw-bold mb-3">Diabetes</label>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="diabetes" value="grandparent">
-                                <label class="form-check-label">Grandparent(s)</label>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="diabetes" value="parent">
+                                    <label class="form-check-label">Parent(s)</label>
+                                </div>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="diabetes" value="sibling">
-                                <label class="form-check-label">Sibling(s)</label>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="diabetes" value="grandparent">
+                                    <label class="form-check-label">Grandparent(s)</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">Hypertension</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="hypertension" value="parent">
-                                <label class="form-check-label">Parent(s)</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="hypertension" value="grandparent">
-                                <label class="form-check-label">Grandparent(s)</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="hypertension" value="sibling">
-                                <label class="form-check-label">Sibling(s)</label>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="diabetes" value="sibling">
+                                    <label class="form-check-label">Sibling(s)</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">Heart Disease</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="heart_disease" value="parent">
-                                <label class="form-check-label">Parent(s)</label>
+
+                        <!-- Hypertension -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <label class="form-label fw-bold mb-3">Hypertension</label>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="heart_disease" value="grandparent">
-                                <label class="form-check-label">Grandparent(s)</label>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="hypertension" value="parent">
+                                    <label class="form-check-label">Parent(s)</label>
+                                </div>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="heart_disease" value="sibling">
-                                <label class="form-check-label">Sibling(s)</label>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="hypertension" value="grandparent">
+                                    <label class="form-check-label">Grandparent(s)</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">Mental Health Conditions</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="mental_health" value="parent">
-                                <label class="form-check-label">Parent(s)</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="mental_health" value="grandparent">
-                                <label class="form-check-label">Grandparent(s)</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="mental_health" value="sibling">
-                                <label class="form-check-label">Sibling(s)</label>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="hypertension" value="sibling">
+                                    <label class="form-check-label">Sibling(s)</label>
+                                </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">
+
+                        <!-- Heart Disease -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <label class="form-label fw-bold mb-3">Heart Disease</label>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="heart_disease" value="parent">
+                                    <label class="form-check-label">Parent(s)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="heart_disease" value="grandparent">
+                                    <label class="form-check-label">Grandparent(s)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="heart_disease" value="sibling">
+                                    <label class="form-check-label">Sibling(s)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mental Health Conditions -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <label class="form-label fw-bold mb-3">Mental Health Conditions</label>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="mental_health" value="parent">
+                                    <label class="form-check-label">Parent(s)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="mental_health" value="grandparent">
+                                    <label class="form-check-label">Grandparent(s)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="mental_health" value="sibling">
+                                    <label class="form-check-label">Sibling(s)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-3">
                             <i class="fas fa-save me-2"></i> Save Family History
                         </button>
                     </form>

@@ -1,0 +1,289 @@
+/* ===============================
+   RISK REPORT PAGE - PREMIUM 3D EFFECTS
+   =============================== */
+
+/* Report Header */
+.report-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--card-border);
+    animation: slideInUp 0.6s ease-out;
+}
+
+.report-header h2 {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.report-date {
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+/* ===============================
+   DISEASE CARD STYLES - 3D EFFECTS
+   =============================== */
+
+.disease-card {
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255,255,255,0.3) 100%);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    animation: slideInUp 0.6s ease-out backwards;
+}
+
+.disease-card:nth-child(1) { animation-delay: 0.1s; }
+.disease-card:nth-child(2) { animation-delay: 0.2s; }
+.disease-card:nth-child(3) { animation-delay: 0.3s; }
+.disease-card:nth-child(4) { animation-delay: 0.4s; }
+.disease-card:nth-child(5) { animation-delay: 0.5s; }
+
+.disease-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 60px rgba(59, 130, 246, 0.2);
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.disease-card .card-header-strip {
+    height: 8px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.disease-card.low .card-header-strip {
+    background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+}
+
+.disease-card.medium .card-header-strip {
+    background: linear-gradient(90deg, #f59e0b 0%, #fcd34d 100%);
+}
+
+.disease-card.high .card-header-strip {
+    background: linear-gradient(90deg, #ef4444 0%, #fca5a5 100%);
+}
+
+.disease-card.very-high .card-header-strip {
+    background: linear-gradient(90deg, #dc2626 0%, #fecaca 100%);
+}
+
+.disease-card:hover .card-header-strip {
+    height: 12px;
+}
+
+/* ===============================
+   PROGRESS BAR STYLES - ENHANCED
+   =============================== */
+
+.progress-custom {
+    height: 12px;
+    background: linear-gradient(90deg, var(--light-color) 0%, rgba(0,0,0,0.05) 100%);
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+}
+
+.progress-bar {
+    border-radius: 9999px;
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* ===============================
+   STAT CARD STYLES - GLASSMORPHISM
+   =============================== */
+
+.stat-card {
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255,255,255,0.5) 100%);
+    backdrop-filter: blur(10px);
+    border-radius: 1.25rem;
+    padding: 2rem;
+    text-align: center;
+    border: 1px solid var(--glass-border);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.4s ease;
+    animation: slideInUp 0.6s ease-out backwards;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+}
+
+.stat-card:nth-child(1) { animation-delay: 0.1s; }
+.stat-card:nth-child(2) { animation-delay: 0.2s; }
+.stat-card:nth-child(3) { animation-delay: 0.3s; }
+.stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+.stat-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 60px rgba(59, 130, 246, 0.2);
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.stat-card h5 {
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+/* ===============================
+   OVERALL SCORE DISPLAY - 3D
+   =============================== */
+
+.overall-score-display {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: conic-gradient(var(--primary-color) var(--score-percent), var(--light-color) 0);
+    box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);\n    animation: spinIn 0.8s ease-out;
+}
+
+.overall-score-inner {
+    width: 155px;
+    height: 155px;
+    background: linear-gradient(135deg, var(--card-bg) 0%, var(--body-bg) 100%);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 4px 12px rgba(0,0,0,0.1);
+}
+
+@keyframes spinIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5) rotateZ(-180deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotateZ(0);
+    }
+}
+
+/* ===============================
+   OVERALL RISK SCORE
+   =============================== */
+
+#overallScore {
+    letter-spacing: -2px;
+    font-size: 2.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ===============================
+   RECOMMENDATIONS SECTION - ENHANCED
+   =============================== */
+
+.recommendations-section {
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255,255,255,0.3) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 1.25rem;
+    padding: 2rem;
+    margin-top: 2rem;
+    animation: slideInUp 0.8s ease-out;
+}
+
+.recommendations-section h4 {
+    color: var(--heading-color);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+}
+
+.recommendations-section i {
+    margin-right: 0.75rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.25rem;
+}
+
+.recommendation-item {
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--body-bg) 0%, var(--light-color) 100%);
+    border-left: 5px solid var(--primary-color);
+    border-radius: 0.75rem;
+    transition: all 0.4s ease;
+    animation: slideInUp 0.4s ease-out backwards;
+}
+
+.recommendation-item:nth-child(1) { animation-delay: 0.1s; }
+.recommendation-item:nth-child(2) { animation-delay: 0.2s; }
+.recommendation-item:nth-child(3) { animation-delay: 0.3s; }
+.recommendation-item:nth-child(4) { animation-delay: 0.4s; }
+.recommendation-item:nth-child(5) { animation-delay: 0.5s; }
+
+.recommendation-item:hover {
+    transform: translateX(8px);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+}
+
+.recommendation-item p {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+/* ===============================
+   REPORT ACTIONS
+   =============================== */
+
+.report-actions {
+    margin-top: 2.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.report-actions .btn {
+    flex: 1;
+    min-width: 150px;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    transition: all 0.4s ease;
+}
+
+.report-actions .btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border: none;
+}
+
+.report-actions .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
+}
+
+/* ===============================
+   PRINT STYLES
+   =============================== */
+
+@media print {
+    .report-actions {
+        display: none;
+    }
+    
+    .disease-card {
+        page-break-inside: avoid;
+    }
+}
+

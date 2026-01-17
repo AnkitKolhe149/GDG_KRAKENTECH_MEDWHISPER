@@ -1,0 +1,589 @@
+/* ===============================
+   THEME & COLOR VARIABLES - EXTENDED
+   =============================== */
+
+:root {
+    --primary-color: #3b82f6; /* Modern Blue */
+    --secondary-color: #10b981; /* Emerald */
+    --danger-color: #ef4444; /* Red */
+    --warning-color: #f59e0b; /* Amber */
+    --dark-color: #1f2937; /* Gray 800 */
+    --light-color: #ecf0f5; /* Light Blue Gray */
+    --body-bg: #f5f7fa; /* Soft Gray Blue */
+    --text-color: #2d3748; /* Deep Gray */
+    --card-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+    --card-shadow-hover: 0 12px 24px -4px rgba(0, 0, 0, 0.12), 0 6px 12px -4px rgba(0, 0, 0, 0.08);
+    --navbar-bg: #ffffff;
+    --navbar-text: #2d3748;
+    --card-bg: #ffffff;
+    --card-border: #dce4ed;
+    --footer-bg: #f8f9fb;
+    --footer-border: #dce4ed;
+    --heading-color: #1a202c;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.2);
+}
+
+/* Dark mode colors */
+[data-theme="dark"] {
+    --body-bg: #0f1419; /* Very Deep Dark */
+    --text-color: #e0e8f0; /* Light Blue Gray */
+    --navbar-bg: #1a2332;
+    --navbar-text: #e0e8f0;
+    --card-bg: #252f3f;
+    --card-border: #3a4557;
+    --footer-bg: #1a2332;
+    --footer-border: #3a4557;
+    --heading-color: #f0f4f8;
+    --light-color: #3a4557;
+    --glass-bg: rgba(37, 47, 63, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* ===============================
+   GLOBAL ANIMATIONS
+   =============================== */
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes ripple {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 0.6;
+    }
+    100% {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+    }
+}
+
+/* ===============================
+   GLOBAL STYLES
+   =============================== */
+
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--body-bg);
+    color: var(--text-color);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--heading-color);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    transition: color 0.3s ease;
+}
+
+p {
+    color: var(--text-color);
+}
+
+small {
+    color: var(--text-color);
+}
+
+/* ===============================
+   NAVBAR STYLES - PREMIUM 3D
+   =============================== */
+
+.navbar {
+    background: linear-gradient(135deg, var(--navbar-bg) 0%, var(--navbar-bg) 100%);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.navbar-brand {
+    color: var(--primary-color) !important;
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: -0.025em;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+.nav-link {
+    color: var(--navbar-text) !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 0.5rem 1rem !important;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-50%);
+}
+
+.nav-link:hover {
+    color: var(--primary-color) !important;
+    transform: translateY(-2px);
+}
+
+.nav-link:hover::after {
+    width: 80%;
+}
+
+/* ===============================
+   CARD STYLES - GLASSMORPHISM
+   =============================== */
+
+.card {
+    border: 1px solid var(--card-border);
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255,255,255,0.5) 100%);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    border-radius: 1.25rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 20px 60px rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-bottom: none;
+    border-radius: 1.25rem 1.25rem 0 0;
+    color: white !important;
+}
+
+.card-title {
+    color: var(--heading-color);
+    font-weight: 700;
+}
+
+.card-text {
+    color: var(--text-color);
+}
+
+/* ===============================
+   BUTTON STYLES - RIPPLE & 3D
+   =============================== */
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-color: transparent;
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #059669 100%);
+    border-color: transparent;
+    color: white;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 40px rgba(16, 185, 129, 0.3);
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    background: transparent;
+}
+
+.btn-outline-primary:hover {
+    background: rgba(59, 130, 246, 0.1);
+    transform: translateY(-4px);
+}
+
+/* ===============================
+   FORM STYLES - 3D FOCUS EFFECTS
+   =============================== */
+
+.form-control, 
+.form-select {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 2px solid var(--card-border);
+    border-radius: 0.75rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.95rem;
+}
+
+.form-control:focus, 
+.form-select:focus {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.3rem rgba(59, 130, 246, 0.15);
+    transform: translateY(-2px);
+}
+
+.form-label {
+    color: var(--heading-color);
+    font-weight: 600;
+    transition: color 0.3s ease;
+    margin-bottom: 0.5rem;
+}
+
+.form-check-label {
+    color: var(--text-color);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.form-check-input {
+    border: 2px solid var(--card-border);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    accent-color: var(--primary-color);
+}
+
+.form-check-input:checked {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.form-check-input:hover {
+    transform: scale(1.1);
+}
+
+/* ===============================
+   TAB STYLES - PREMIUM
+   =============================== */
+
+.nav-tabs {
+    border-bottom: 2px solid var(--card-border);
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255,255,255,0.3) 100%);
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.nav-tabs .nav-link {
+    color: var(--text-color) !important;
+    border-color: transparent;
+    border-radius: 0.75rem;
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.nav-tabs .nav-link:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--primary-color) !important;
+    transform: translateY(-2px);
+}
+
+.nav-tabs .nav-link.active {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-color: transparent;
+    color: white !important;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+    transform: scale(1.05);
+}
+
+/* ===============================
+   ALERT STYLES - ENHANCED
+   =============================== */
+
+.alert {
+    background: linear-gradient(135deg, var(--card-bg) 0%, var(--body-bg) 100%);
+    border: 2px solid var(--card-border);
+    border-radius: 1rem;
+    color: var(--text-color);
+    animation: slideInDown 0.4s ease-out;
+    backdrop-filter: blur(10px);
+}
+
+.alert-success {
+    background: rgba(34, 197, 94, 0.1);
+    border-color: rgba(34, 197, 94, 0.3);
+    color: #059669;
+}
+
+[data-theme="dark"] .alert-success {
+    background: rgba(34, 197, 94, 0.15);
+    color: #86efac;
+}
+
+.alert-danger {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #dc2626;
+}
+
+[data-theme="dark"] .alert-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+}
+
+.alert-warning {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: #b45309;
+}
+
+/* ===============================
+   RISK BADGE STYLES - GRADIENT
+   =============================== */
+
+.risk-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.risk-badge:hover {
+    transform: scale(1.1);
+}
+
+.risk-low {
+    background: linear-gradient(135deg, #d1f2e8 0%, #a7f3d0 100%);
+    color: #0d6e4f;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+}
+
+[data-theme="dark"] .risk-low {
+    background: linear-gradient(135deg, #145a47 0%, #1d7a6e 100%);
+    color: #a7f3d0;
+}
+
+.risk-medium {
+    background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%);
+    color: #b45309;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+}
+
+[data-theme="dark"] .risk-medium {
+    background: linear-gradient(135deg, #78350f 0%, #a16207 100%);
+    color: #fcd34d;
+}
+
+.risk-high {
+    background: linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%);
+    color: #b91c1c;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+[data-theme="dark"] .risk-high {
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+    color: #fca5a5;
+}
+
+.risk-very-high {
+    background: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+[data-theme="dark"] .risk-very-high {
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+    color: #fecaca;
+}
+
+/* ===============================
+   UTILITY CLASSES
+   =============================== */
+
+.text-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.bg-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
+    color: white;
+}
+
+.bg-light {
+    background-color: var(--light-color) !important;
+}
+
+.text-dark {
+    color: var(--dark-color) !important;
+}
+
+.text-muted {
+    color: #718096 !important;
+}
+
+.spinner-border {
+    color: var(--primary-color);
+    animation: spin 1s linear infinite;
+}
+
+.shadow-lg {
+    box-shadow: 0 20px 60px rgba(59, 130, 246, 0.15) !important;
+}
+
+.shadow-sm {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ===============================
+   FOOTER STYLES
+   =============================== */
+
+footer {
+    margin-top: 4rem;
+    padding: 3rem 0;
+    background: linear-gradient(135deg, var(--footer-bg) 0%, var(--body-bg) 100%);
+    color: #6b7280;
+    border-top: 1px solid var(--footer-border);
+    transition: all 0.3s ease;
+    animation: slideInUp 1s ease-out;
+}
+
+footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+footer a:hover {
+    color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+/* ===============================
+   THEME TOGGLE BUTTON - PREMIUM
+   =============================== */
+
+.theme-toggle {
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255,255,255,0.5) 100%);
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--card-border);
+    color: var(--text-color);
+    padding: 0.65rem 0.85rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 1.1rem;
+}
+
+.theme-toggle:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+/* ===============================
+   RESPONSIVE & MOBILE
+   =============================== */
+
+@media (max-width: 768px) {
+    .btn {
+        padding: 0.65rem 1.25rem;
+        font-size: 0.9rem;
+    }
+
+    .card {
+        border-radius: 1rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.25rem;
+    }
+}

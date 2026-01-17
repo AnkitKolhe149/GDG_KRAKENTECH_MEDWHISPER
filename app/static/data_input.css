@@ -1,0 +1,570 @@
+/* ===============================
+   DATA INPUT PAGE - PREMIUM 3D EFFECTS
+   =============================== */
+
+/* Page Title & Subtitle */
+.page-title {
+    color: var(--heading-color);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    animation: slideInUp 0.6s ease-out;
+}
+
+.page-subtitle {
+    color: var(--text-color);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    animation: slideInUp 0.6s ease-out 0.1s both;
+}
+
+/* Validation Message */
+.validation-message {
+    margin-top: 1.5rem;
+    display: none;
+}
+
+.validation-message.show {
+    display: block;
+    animation: slideInDown 0.4s ease-out;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255,255,255,0.3) 100%);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid var(--glass-border);
+    border-radius: 1rem;
+    padding: 0.75rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--glass-border) !important;
+}
+
+.tab-link {
+    color: var(--text-color) !important;
+    border: none;
+    border-radius: 0.75rem;
+    margin-right: 0.5rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    font-weight: 500;
+    padding: 0.65rem 1rem !important;
+}
+
+.tab-link:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--primary-color) !important;
+    transform: translateY(-2px);
+}
+
+.tab-link.active {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white !important;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+    transform: scale(1.05);
+}
+
+/* Form Card Styling */
+.form-card {
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255,255,255,0.3) 100%);
+    border: 1px solid var(--glass-border);
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 2rem;
+    animation: slideInUp 0.6s ease-out;
+}
+
+.form-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 48px rgba(59, 130, 246, 0.2);
+}
+
+.form-card-body {
+    padding: 2rem;
+}
+
+.data-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.family-history-description {
+    color: var(--text-color);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+    font-style: italic;
+}
+
+/* Form Cards */
+#labDataForm .card,
+#lifestyleDataForm .card,
+#mentalHealthDataForm .card,
+#familyHistoryForm .card {
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255,255,255,0.5) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 1.25rem;
+    animation: slideInUp 0.6s ease-out;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+}
+
+#labDataForm .card { animation-delay: 0.1s; }
+#lifestyleDataForm .card { animation-delay: 0.2s; }
+#mentalHealthDataForm .card { animation-delay: 0.3s; }
+#familyHistoryForm .card { animation-delay: 0.4s; }
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--heading-color);
+    transition: all 0.3s ease;
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+}
+
+/* Form Input */
+.form-control {
+    border-radius: 0.75rem;
+    border: 2px solid var(--card-border);
+    background: var(--body-bg);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.95rem;
+    padding: 0.65rem 0.875rem;
+}
+
+.form-control:hover {
+    border-color: rgba(59, 130, 246, 0.5);
+    background: rgba(59, 130, 246, 0.02);
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.3rem rgba(59, 130, 246, 0.15);
+    transform: translateY(-2px);
+    background: var(--body-bg);
+}
+
+.form-control::placeholder {
+    color: rgba(107, 114, 128, 0.7);
+}
+
+/* Select Inputs */
+.form-select {
+    border-radius: 0.75rem;
+    border: 2px solid var(--card-border);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0.65rem 0.875rem;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%233b82f6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    padding-right: 2.5rem;
+}
+
+.form-select:hover {
+    border-color: rgba(59, 130, 246, 0.5);
+    background-color: rgba(59, 130, 246, 0.02);
+}
+
+.form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.3rem rgba(59, 130, 246, 0.15);
+    outline: none;
+}
+
+/* Submit Button */
+.btn-primary {
+    width: 100%;
+    margin-top: 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.875rem 1.5rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Validation Message */
+.validation-message,
+#dataValidationMessage {
+    margin-top: 1.5rem;
+    border-radius: 1rem;
+    animation: slideInDown 0.3s ease;
+    border: 2px solid;
+    backdrop-filter: blur(10px);
+    padding: 1rem 1.5rem;
+    display: none;
+}
+
+.validation-message.show,
+#dataValidationMessage.show {
+    display: block;
+}
+
+.validation-message.alert-success,
+#dataValidationMessage .alert-success {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+    border-color: rgba(34, 197, 94, 0.3);
+    color: #059669;
+}
+
+.validation-message.alert-danger,
+#dataValidationMessage .alert-danger {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #dc2626;
+}
+
+.validation-message.alert-warning,
+#dataValidationMessage .alert-warning {
+    background: linear-gradient(135deg, rgba(250, 204, 21, 0.1) 0%, rgba(250, 204, 21, 0.05) 100%);
+    border-color: rgba(250, 204, 21, 0.3);
+    color: #d97706;
+}
+
+.validation-message.alert-info,
+#dataValidationMessage .alert-info {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #0369a1;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Family History Checkboxes */
+.form-check {
+    padding-left: 0;
+    margin-bottom: 1rem;
+}
+
+.form-check-input {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.75rem;
+    margin-top: 0.125rem;
+    border: 2px solid var(--card-border);
+    border-radius: 0.35rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    accent-color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.form-check-input:hover {
+    transform: scale(1.15);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.2);
+}
+
+.form-check-input:checked {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.form-check-input:checked:hover {
+    transform: scale(1.15);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.form-check-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.2);
+}
+
+.form-check-label {
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    user-select: none;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-check-label:hover {
+    color: var(--primary-color);
+}
+
+/* Family History Section Styling */
+#familyHistoryForm .row {
+    background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
+    backdrop-filter: blur(8px);
+    border: 1.5px solid var(--glass-border);
+    border-radius: 0.875rem;
+    padding: 1.75rem;
+    margin-bottom: 1.75rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: slideInUp 0.6s ease-out;
+}
+
+#familyHistoryForm .row:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
+    border-color: rgba(59, 130, 246, 0.3);
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.15);
+    transform: translateY(-2px);
+}
+
+#familyHistoryForm .row .col-12 {
+    margin-bottom: 1rem;
+}
+
+#familyHistoryForm .form-label {
+    font-weight: 700;
+    color: var(--heading-color);
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+#familyHistoryForm .form-label::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 24px;
+    background: linear-gradient(180deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-radius: 3px;
+    animation: slideInUp 0.6s ease-out;
+}
+
+/* Column alignment for checkboxes */
+#familyHistoryForm .col-md-4 {
+    padding: 0.75rem;
+}
+
+#familyHistoryForm .form-check {
+    background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.2) 100%);
+    backdrop-filter: blur(6px);
+    padding: 0.875rem 1.125rem;
+    border-radius: 0.625rem;
+    border: 1px solid rgba(255,255,255,0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+#familyHistoryForm .form-check:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(16, 185, 129, 0.08) 100%);
+    border-color: rgba(59, 130, 246, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.15);
+}
+
+#familyHistoryForm .form-check-input {
+    margin-right: 0;
+    margin-top: 0;
+    flex-shrink: 0;
+}
+
+#familyHistoryForm .form-check-label {
+    margin-bottom: 0;
+    margin-left: 0;
+    width: 100%;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 1.875rem;
+    }
+
+    .page-subtitle {
+        font-size: 1rem;
+    }
+
+    .tab-link {
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem !important;
+    }
+
+    .tab-link.active {
+        transform: scale(1.02);
+    }
+
+    .form-card-body {
+        padding: 1.25rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    #familyHistoryForm .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        padding: 0.5rem 0;
+    }
+
+    #familyHistoryForm .row {
+        padding: 1rem;
+    }
+
+    .btn-primary {
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-title {
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .page-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .tab-navigation {
+        padding: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .tab-link {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.6rem !important;
+        margin-right: 0.25rem;
+    }
+
+    .form-card-body {
+        padding: 1rem;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+    }
+
+    .form-control,
+    .form-select {
+        font-size: 0.875rem;
+        padding: 0.5rem 0.625rem;
+    }
+
+    #familyHistoryForm .row {
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    #familyHistoryForm .form-label {
+        font-size: 0.95rem;
+        gap: 0.5rem;
+    }
+
+    #familyHistoryForm .form-check {
+        padding: 0.65rem 0.875rem;
+        font-size: 0.875rem;
+    }
+
+    #familyHistoryForm .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* Dark Mode Support */
+[data-theme="dark"] .page-title {
+    color: var(--heading-color);
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+    background: var(--body-bg);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .form-control:hover,
+[data-theme="dark"] .form-select:hover {
+    background: rgba(59, 130, 246, 0.05);
+}
+
+[data-theme="dark"] #familyHistoryForm .row {
+    border-color: var(--glass-border);
+}
+
+[data-theme="dark"] #familyHistoryForm .form-check {
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+/* Focus States for Accessibility */
+.form-control:focus-visible,
+.form-select:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.btn-primary:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
+.form-check-input:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}

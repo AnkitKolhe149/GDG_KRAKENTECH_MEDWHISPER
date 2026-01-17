@@ -2,6 +2,10 @@
 
 {% block title %}MedWhisper - Home{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="container py-5">
     <!-- Hero Section -->
@@ -34,107 +38,107 @@
         </div>
         
         <div class="col-md-3 mb-4">
-            <div class="card h-100 text-center p-4" style="background-color: var(--card-bg); border-color: var(--card-border);">
+            <div class="card feature-card h-100 text-center p-4">
                 <div class="card-body">
                     <div class="mb-3">
                         <i class="fas fa-flask fa-3x text-primary"></i>
                     </div>
-                    <h5 class="card-title" style="color: var(--heading-color);">Lab Trends</h5>
-                    <p class="card-text" style="color: var(--text-color);">Track blood tests, glucose, cholesterol, liver enzymes over time</p>
+                    <h5 class="card-title">Lab Trends</h5>
+                    <p class="card-text">Track blood tests, glucose, cholesterol, liver enzymes over time</p>
                 </div>
             </div>
         </div>
         
         <div class="col-md-3 mb-4">
-            <div class="card h-100 text-center p-4" style="background-color: var(--card-bg); border-color: var(--card-border);">
+            <div class="card feature-card h-100 text-center p-4">
                 <div class="card-body">
                     <div class="mb-3">
                         <i class="fas fa-running fa-3x text-success"></i>
                     </div>
-                    <h5 class="card-title" style="color: var(--heading-color);">Lifestyle Data</h5>
-                    <p class="card-text" style="color: var(--text-color);">Sleep, activity, nutrition, and exercise patterns</p>
+                    <h5 class="card-title">Lifestyle Data</h5>
+                    <p class="card-text">Sleep, activity, nutrition, and exercise patterns</p>
                 </div>
             </div>
         </div>
         
         <div class="col-md-3 mb-4">
-            <div class="card h-100 text-center p-4" style="background-color: var(--card-bg); border-color: var(--card-border);">
+            <div class="card feature-card h-100 text-center p-4">
                 <div class="card-body">
                     <div class="mb-3">
                         <i class="fas fa-brain fa-3x text-info"></i>
                     </div>
-                    <h5 class="card-title" style="color: var(--heading-color);">Mental Health</h5>
-                    <p class="card-text" style="color: var(--text-color);">Stress, mood, anxiety levels and sleep quality</p>
+                    <h5 class="card-title">Mental Health</h5>
+                    <p class="card-text">Stress, mood, anxiety levels and sleep quality</p>
                 </div>
             </div>
         </div>
         
         <div class="col-md-3 mb-4">
-            <div class="card h-100 text-center p-4" style="background-color: var(--card-bg); border-color: var(--card-border);">
+            <div class="card feature-card h-100 text-center p-4">
                 <div class="card-body">
                     <div class="mb-3">
                         <i class="fas fa-dna fa-3x text-warning"></i>
                     </div>
-                    <h5 class="card-title" style="color: var(--heading-color);">Family History</h5>
-                    <p class="card-text" style="color: var(--text-color);">Genetic predisposition and hereditary risk factors</p>
+                    <h5 class="card-title">Family History</h5>
+                    <p class="card-text">Genetic predisposition and hereditary risk factors</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Disease Detection Section -->
-    <div class="row mt-5 pt-5 rounded-3 p-5" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
+    <div class="row mt-5 pt-5 disease-section">
         <div class="col-12 text-center mb-4">
             <h2 class="fw-bold" style="color: var(--heading-color);">Diseases We Detect</h2>
             <p class="text-muted">Early risk assessment for multiple conditions</p>
         </div>
         
         <div class="col-md-6 col-lg-4 mb-3">
-            <div class="d-flex align-items-center p-3 rounded shadow-sm" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
+            <div class="d-flex align-items-center p-3 disease-item">
                 <i class="fas fa-heartbeat fa-2x text-danger me-3"></i>
                 <div>
-                    <h6 class="mb-0" style="color: var(--heading-color);">Diabetes</h6>
-                    <small style="color: var(--text-color);">Type 2 diabetes risk</small>
+                    <h6 class="mb-0">Diabetes</h6>
+                    <small>Type 2 diabetes risk</small>
                 </div>
             </div>
         </div>
         
         <div class="col-md-6 col-lg-4 mb-3">
-            <div class="d-flex align-items-center p-3 rounded shadow-sm" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
+            <div class="d-flex align-items-center p-3 disease-item">
                 <i class="fas fa-heartbeat fa-2x text-primary me-3"></i>
                 <div>
-                    <h6 class="mb-0" style="color: var(--heading-color);">Hypertension</h6>
-                    <small style="color: var(--text-color);">High blood pressure risk</small>
+                    <h6 class="mb-0">Hypertension</h6>
+                    <small>High blood pressure risk</small>
                 </div>
             </div>
         </div>
         
         <div class="col-md-6 col-lg-4 mb-3">
-            <div class="d-flex align-items-center p-3 rounded shadow-sm" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
+            <div class="d-flex align-items-center p-3 disease-item">
                 <i class="fas fa-heartbeat fa-2x text-warning me-3"></i>
                 <div>
-                    <h6 class="mb-0" style="color: var(--heading-color);">Liver Disease</h6>
-                    <small style="color: var(--text-color);">Liver function disorders</small>
+                    <h6 class="mb-0">Liver Disease</h6>
+                    <small>Liver function disorders</small>
                 </div>
             </div>
         </div>
         
         <div class="col-md-6 col-lg-4 mb-3">
-            <div class="d-flex align-items-center p-3 rounded shadow-sm" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
+            <div class="d-flex align-items-center p-3 disease-item">
                 <i class="fas fa-heart fa-2x text-danger me-3"></i>
                 <div>
-                    <h6 class="mb-0" style="color: var(--heading-color);">Cardiac Risk</h6>
-                    <small style="color: var(--text-color);">Heart disease risk</small>
+                    <h6 class="mb-0">Cardiac Risk</h6>
+                    <small>Heart disease risk</small>
                 </div>
             </div>
         </div>
         
         <div class="col-md-6 col-lg-4 mb-3">
-            <div class="d-flex align-items-center p-3 rounded shadow-sm" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
+            <div class="d-flex align-items-center p-3 disease-item">
                 <i class="fas fa-brain fa-2x text-info me-3"></i>
                 <div>
-                    <h6 class="mb-0" style="color: var(--heading-color);">Mental Health</h6>
-                    <small style="color: var(--text-color);">Depression & anxiety risk</small>
+                    <h6 class="mb-0">Mental Health</h6>
+                    <small>Depression & anxiety risk</small>
                 </div>
             </div>
         </div>
