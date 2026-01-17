@@ -100,6 +100,48 @@
             </div>
         </div>
     </div>
+
+    <!-- Find Doctors Near You -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                <div class="card-header" style="background-color: var(--card-bg); border-bottom-color: var(--card-border);">
+                    <h5 class="mb-0" style="color: var(--heading-color);">
+                        <i class="fas fa-user-md me-2"></i> Find Doctors Near You
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label class="form-label" for="doctorArea">Area (fixed)</label>
+                            <input type="text" class="form-control" id="doctorArea" value="Nagpur" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="doctorLat">Latitude</label>
+                            <input type="text" class="form-control" id="doctorLat" placeholder="Disabled" disabled>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="doctorLon">Longitude</label>
+                            <input type="text" class="form-control" id="doctorLon" placeholder="Disabled" disabled>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="doctorRadius">Radius (km)</label>
+                            <input type="number" class="form-control" id="doctorRadius" value="20" min="1" max="100">
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn btn-primary" id="doctorSearchBtn" onclick="searchDoctors()">
+                            <i class="fas fa-search me-2"></i> Search Doctors
+                        </button>
+                        <small class="text-muted ms-2">Location is fixed to Nagpur.</small>
+                    </div>
+                    <div class="mt-4" id="doctorResults">
+                        <p class="text-muted">Enter location and click search to see nearby doctors.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -268,6 +310,77 @@
             btn.disabled = false;
             btn.textContent = 'Generate Now';
         }
+    }
+
+    async function searchDoctors() {
+        const btn = document.getElementById('doctorSearchBtn');
+        const area = 'Nagpur';
+        const latStr = '';
+        const lonStr = '';
+        const radius = parseFloat(document.getElementById('doctorRadius').value) || 20;
+
+        const resultsDiv = document.getElementById('doctorResults');
+        resultsDiv.innerHTML = `
+            <div class="text-center py-3">
+                <div class="spinner-border" role="status"></div>
+                <p class="mt-2">Searching doctors...</p>
+            </div>
+        `;
+        btn.disabled = true;
+
+        try {
+            let url = `/api/doctors/search?radius_km=${encodeURIComponent(radius)}&area=${encodeURIComponent(area)}`;
+
+            // Use authenticated call (works for public or protected endpoints)
+            const result = await apiCall(url);
+            if (!result || !result.success) {
+                throw new Error(result && result.error ? result.error : 'Search failed');
+            }
+            renderDoctorResults(result.results, result.radius_km);
+        } catch (err) {
+            console.error('Doctor search error:', err);
+            resultsDiv.innerHTML = `<div class="alert alert-danger">${err.message || 'Failed to search doctors'}</div>`;
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+    function renderDoctorResults(items, radius) {
+        const resultsDiv = document.getElementById('doctorResults');
+        if (!items || items.length === 0) {
+            resultsDiv.innerHTML = `<div class="alert alert-info">No doctors found within ${radius} km.</div>`;
+            return;
+        }
+
+        let html = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 style="color: var(--heading-color);">Results (${items.length})</h6>
+                <small class="text-muted">Radius: ${radius} km</small>
+            </div>
+        `;
+
+        html += '<div class="list-group">';
+        items.forEach((doc) => {
+            const name = doc.name || doc.full_name || (doc.first_name && doc.last_name ? `${doc.first_name} ${doc.last_name}` : 'Unknown');
+            const specialties = doc.specialty || (Array.isArray(doc.specialties) ? doc.specialties.join(', ') : '') || '';
+            const phone = doc.phone || (doc.contact && doc.contact.phone) || '';
+            const addrObj = doc.address || doc.location || {};
+            const address = typeof addrObj === 'string' ? addrObj : [addrObj.street, addrObj.city, addrObj.state, addrObj.zip].filter(Boolean).join(', ');
+            const dist = (doc.distance_km !== undefined) ? `${doc.distance_km} km` : '';
+
+            html += `
+                <a class="list-group-item list-group-item-action" style="background-color: var(--card-bg); border-color: var(--card-border);">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1" style="color: var(--heading-color);">${name}</h6>
+                        <small class="text-muted">${dist}</small>
+                    </div>
+                    <p class="mb-1" style="color: var(--text-color);">${specialties || 'Doctor'}</p>
+                    <small class="text-muted">${address || ''} ${phone ? ' • ' + phone : ''}</small>
+                </a>
+            `;
+        });
+        html += '</div>';
+        resultsDiv.innerHTML = html;
     }
 </script>
 {% endblock %}

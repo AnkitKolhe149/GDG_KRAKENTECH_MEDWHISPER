@@ -36,6 +36,13 @@ class Config:
     # CORS Settings
     CORS_ORIGINS = os.getenv('CORS_ORIGINS', '*').split(',')
 
+    # External Doctors API
+    DOCTORS_API_BASE_URL = os.getenv('DOCTORS_API_BASE_URL', 'https://doctorsapi.com/api')
+    DOCTORS_API_KEY = os.getenv('DOCTORS_API_KEY', '')
+    
+    # Google Gemini API
+    GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
+
 
 class DevelopmentConfig(Config):
     """Development configuration"""
