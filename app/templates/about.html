@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - MedWhisper{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='about.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 fw-bold mb-4" style="color: var(--heading-color);">About MedWhisper</h1>
+            <p class="lead text-muted" style="font-size: 1.2rem;">AI-Powered Early Detection for Silent Diseases</p>
+        </div>
+    </div>
+
+    <!-- Mission Section -->
+    <div class="row mb-5">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card about-card">
+                <div class="card-body p-5">
+                    <h2 class="mb-4" style="color: var(--heading-color);">
+                        <i class="fas fa-bullseye text-primary me-3"></i>Our Mission
+                    </h2>
+                    <p class="fs-5 text-muted">
+                        A large percentage of life-threatening diseases remain undiagnosed for years because symptoms are mild, ignored, or fragmented across reports. 
+                        <strong>MedWhisper</strong> is on a mission to provide <strong>predictive prevention rather than reactive diagnosis</strong>.
+                    </p>
+                    <p class="fs-5 text-muted">
+                        We leverage advanced AI and machine learning to analyze comprehensive health data and identify disease risks early, 
+                        before symptoms become severe or life-threatening.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- What We Do Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-5" style="color: var(--heading-color);">What We Do</h2>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="feature-box">
+                        <div class="icon-box">
+                            <i class="fas fa-brain fa-2x text-primary"></i>
+                        </div>
+                        <h4 style="color: var(--heading-color);">AI-Powered Analysis</h4>
+                        <p class="text-muted">
+                            Our advanced machine learning models analyze multiple health data points simultaneously to detect disease risks with high accuracy.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="feature-box">
+                        <div class="icon-box">
+                            <i class="fas fa-chart-line fa-2x text-success"></i>
+                        </div>
+                        <h4 style="color: var(--heading-color);">Multi-Disease Detection</h4>
+                        <p class="text-muted">
+                            We detect risks for diabetes, hypertension, cardiac disease, liver disorders, and mental health conditions in one platform.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="feature-box">
+                        <div class="icon-box">
+                            <i class="fas fa-database fa-2x text-info"></i>
+                        </div>
+                        <h4 style="color: var(--heading-color);">Comprehensive Data Integration</h4>
+                        <p class="text-muted">
+                            We aggregate lab trends, lifestyle data, stress indicators, mental health patterns, and family history for holistic risk assessment.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="feature-box">
+                        <div class="icon-box">
+                            <i class="fas fa-lightbulb fa-2x text-warning"></i>
+                        </div>
+                        <h4 style="color: var(--heading-color);">Personalized Recommendations</h4>
+                        <p class="text-muted">
+                            Based on your risk profile, we provide actionable, personalized recommendations for prevention and early intervention.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Technology Section -->
+    <div class="row mb-5">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card about-card">
+                <div class="card-body p-5">
+                    <h2 class="mb-4" style="color: var(--heading-color);">
+                        <i class="fas fa-cogs text-success me-3"></i>Our Technology
+                    </h2>
+                    <p class="fs-5 text-muted mb-3">
+                        MedWhisper is built on cutting-edge machine learning technologies:
+                    </p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <strong>LightGBM & XGBoost:</strong> Gradient boosting models for high-accuracy predictions
+                        </li>
+                        <li class="mb-2">
+                            <strong>Random Forest:</strong> Ensemble methods for robust risk assessment
+                        </li>
+                        <li class="mb-2">
+                            <strong>Firebase:</strong> Secure cloud authentication and real-time data storage
+                        </li>
+                        <li class="mb-2">
+                            <strong>Modern Web Stack:</strong> Flask backend, Bootstrap UI, responsive design
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Choose Us Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-5" style="color: var(--heading-color);">Why Choose MedWhisper?</h2>
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="reason-card text-center">
+                        <div class="reason-icon mb-3">
+                            <i class="fas fa-check-circle fa-3x text-primary"></i>
+                        </div>
+                        <h5 style="color: var(--heading-color);">Evidence-Based</h5>
+                        <p class="text-muted">
+                            Built on real patient data and clinical research for accurate risk predictions.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="reason-card text-center">
+                        <div class="reason-icon mb-3">
+                            <i class="fas fa-shield-alt fa-3x text-info"></i>
+                        </div>
+                        <h5 style="color: var(--heading-color);">Secure & Private</h5>
+                        <p class="text-muted">
+                            Your health data is encrypted and stored securely with enterprise-grade security.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="reason-card text-center">
+                        <div class="reason-icon mb-3">
+                            <i class="fas fa-mobile-alt fa-3x text-success"></i>
+                        </div>
+                        <h5 style="color: var(--heading-color);">Always Accessible</h5>
+                        <p class="text-muted">
+                            Access your health insights anytime, anywhere with our responsive web platform.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Vision Section -->
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card about-card bg-light">
+                <div class="card-body p-5">
+                    <h2 class="mb-4 text-center" style="color: var(--heading-color);">
+                        <i class="fas fa-heart text-danger me-3"></i>Our Vision
+                    </h2>
+                    <p class="fs-5 text-muted text-center">
+                        We envision a world where silent diseases are detected early, where preventive medicine is personalized and data-driven, 
+                        and where everyone has access to AI-powered health insights. 
+                        <strong>Because early detection saves lives.</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="row mt-5 pt-5 text-center">
+        <div class="col-12">
+            <h3 class="mb-4" style="color: var(--heading-color);">Ready to Take Control of Your Health?</h3>
+            <button class="btn btn-primary btn-lg px-5" onclick="window.location.href='/'">
+                <i class="fab fa-google me-2"></i> Get Started with MedWhisper
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

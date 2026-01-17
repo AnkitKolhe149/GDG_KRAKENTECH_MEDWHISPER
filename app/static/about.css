@@ -1,0 +1,337 @@
+/* ===============================
+   ABOUT PAGE STYLES - ENHANCED 3D
+   =============================== */
+
+.about-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
+    border: 1.5px solid rgba(59, 130, 246, 0.15);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255,255,255,0.6);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.about-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+    opacity: 0.05;
+    border-radius: 50%;
+    transition: all 0.6s ease;
+}
+
+[data-theme="dark"] .about-card {
+    background: linear-gradient(135deg, rgba(26, 40, 71, 0.8) 0%, rgba(20, 27, 47, 0.6) 100%);
+    border-color: rgba(100, 150, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.12), inset 0 1px 0 rgba(96, 165, 250, 0.1);
+}
+
+.about-card:hover {
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 12px 48px rgba(59, 130, 246, 0.18);
+    transform: translateY(-6px);
+}
+
+[data-theme="dark"] .about-card:hover {
+    border-color: rgba(100, 150, 255, 0.4);
+    box-shadow: 0 12px 48px rgba(59, 130, 246, 0.25);
+}
+
+/* ===============================
+   FEATURE BOXES
+   =============================== */
+
+.feature-box {
+    background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
+    border: 1.5px solid rgba(59, 130, 246, 0.12);
+    border-radius: 1.5rem;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255,255,255,0.6);
+    backdrop-filter: blur(12px);
+}
+
+.feature-box::after {
+    content: '';
+    position: absolute;
+    bottom: -50%;
+    left: -50%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+    opacity: 0.04;
+    border-radius: 50%;
+    transition: all 0.6s ease;
+}
+
+[data-theme="dark"] .feature-box {
+    background: linear-gradient(135deg, rgba(26, 40, 71, 0.8) 0%, rgba(20, 27, 47, 0.6) 100%);
+    border-color: rgba(100, 150, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1), inset 0 1px 0 rgba(96, 165, 250, 0.1);
+}
+
+.feature-box:hover {
+    border-color: rgba(59, 130, 246, 0.3);
+    transform: translateY(-8px);
+    box-shadow: 0 16px 48px rgba(59, 130, 246, 0.2);
+}
+
+[data-theme="dark"] .feature-box:hover {
+    border-color: rgba(100, 150, 255, 0.35);
+    box-shadow: 0 16px 48px rgba(59, 130, 246, 0.25);
+}
+
+.feature-box .icon-box {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(16, 185, 129, 0.08) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] .feature-box .icon-box {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%);
+    border-color: rgba(100, 150, 255, 0.2);
+}
+
+.feature-box:hover .icon-box {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(16, 185, 129, 0.15) 100%);
+    transform: scale(1.15) rotateY(10deg);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+}
+
+/* ===============================
+   REASON CARDS
+   =============================== */
+
+.reason-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
+    border: 1.5px solid rgba(59, 130, 246, 0.12);
+    border-radius: 1.5rem;
+    padding: 2.5rem 2rem;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255,255,255,0.6);
+    backdrop-filter: blur(12px);
+}
+
+.reason-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+    opacity: 0.04;
+    border-radius: 50%;
+    transition: all 0.6s ease;
+}
+
+[data-theme="dark"] .reason-card {
+    background: linear-gradient(135deg, rgba(26, 40, 71, 0.8) 0%, rgba(20, 27, 47, 0.6) 100%);
+    border-color: rgba(100, 150, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1), inset 0 1px 0 rgba(96, 165, 250, 0.1);
+}
+
+.reason-card:hover {
+    border-color: rgba(59, 130, 246, 0.3);
+    transform: translateY(-8px);
+    box-shadow: 0 16px 48px rgba(59, 130, 246, 0.2);
+}
+
+[data-theme="dark"] .reason-card:hover {
+    border-color: rgba(100, 150, 255, 0.35);
+    box-shadow: 0 16px 48px rgba(59, 130, 246, 0.25);
+}
+
+.reason-card .reason-icon {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-block;
+}
+
+.reason-card:hover .reason-icon {
+    transform: scale(1.2) rotateZ(5deg);
+    filter: drop-shadow(0 8px 16px rgba(59, 130, 246, 0.25));
+}
+
+/* ===============================
+   TYPOGRAPHY
+   =============================== */
+
+.about-card h2,
+.feature-box h4,
+.reason-card h5 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--heading-color);
+}
+
+.about-card p,
+.feature-box p,
+.reason-card p {
+    color: var(--text-color);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* ===============================
+   ANIMATIONS
+   =============================== */
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.about-card {
+    animation: slideInUp 0.6s ease-out backwards;
+}
+
+.feature-box {
+    animation: slideInUp 0.6s ease-out backwards;
+}
+
+.reason-card {
+    animation: slideInUp 0.6s ease-out backwards;
+}
+
+.row > .col-lg-8 {
+    animation: fadeIn 0.8s ease-out;
+}
+
+.row > .col-md-6,
+.row > .col-lg-4 {
+    animation: slideInUp 0.6s ease-out backwards;
+}
+
+.row > .col-md-6:nth-child(1) { animation-delay: 0.1s; }
+.row > .col-md-6:nth-child(2) { animation-delay: 0.15s; }
+.row > .col-md-6:nth-child(3) { animation-delay: 0.2s; }
+.row > .col-md-6:nth-child(4) { animation-delay: 0.25s; }
+
+.row > .col-lg-4:nth-child(1) { animation-delay: 0.1s; }
+.row > .col-lg-4:nth-child(2) { animation-delay: 0.15s; }
+.row > .col-lg-4:nth-child(3) { animation-delay: 0.2s; }
+
+/* ===============================
+   PAGE HEADER
+   =============================== */
+
+.container > .row:first-child h1 {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 1rem;
+    animation: slideInUp 0.6s ease-out 0.1s both;
+}
+
+.container > .row:first-child .lead {
+    font-weight: 500;
+    animation: slideInUp 0.6s ease-out 0.2s both;
+}
+
+/* ===============================
+   BUTTON STYLING
+   =============================== */
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #2563eb 100%);
+    border: none;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 0.75rem 2rem;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+.btn-primary:active {
+    transform: translateY(-1px);
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 992px) {
+    .about-card {
+        padding: 2rem;
+    }
+    
+    .feature-box {
+        padding: 1.75rem 1.25rem;
+    }
+    
+    .reason-card {
+        padding: 2rem 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .feature-box,
+    .reason-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    h1.display-4 {
+        font-size: 2rem !important;
+    }
+    
+    .about-card {
+        padding: 1.75rem;
+    }
+}
+
+@media (max-width: 576px) {
+    h1.display-4 {
+        font-size: 1.75rem !important;
+    }
+    
+    .lead {
+        font-size: 1rem !important;
+    }
+    
+    .about-card,
+    .feature-box,
+    .reason-card {
+        padding: 1.5rem 1rem;
+    }
+}

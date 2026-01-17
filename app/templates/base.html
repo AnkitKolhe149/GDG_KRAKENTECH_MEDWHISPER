@@ -35,6 +35,12 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
@@ -42,6 +48,11 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/risk-report">Risk Report</a>
+                    </li>
+                    <li class="nav-item" id="feedbackNavItem" style="display: none;">
+                        <a class="nav-link" href="/feedback">
+                            <i class="fas fa-comment-dots"></i> Feedback
+                        </a>
                     </li>
                     <li class="nav-item" id="authSection">
                         <button class="btn btn-outline-primary btn-sm" onclick="handleAuth()">
@@ -437,12 +448,14 @@
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 document.getElementById('authText').textContent = 'Sign Out';
+                document.getElementById('feedbackNavItem').style.display = 'block';
                 localStorage.setItem('userId', user.uid);
                 user.getIdToken().then((token) => {
                     localStorage.setItem('authToken', token);
                 });
             } else {
                 document.getElementById('authText').textContent = 'Sign In';
+                document.getElementById('feedbackNavItem').style.display = 'none';
                 localStorage.removeItem('userId');
                 localStorage.removeItem('authToken');
             }

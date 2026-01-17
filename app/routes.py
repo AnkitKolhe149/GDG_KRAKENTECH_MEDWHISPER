@@ -1,5 +1,5 @@
 """Application routes and API endpoints"""
-from flask import Blueprint, render_template, request, jsonify, current_app
+from flask import Blueprint, render_template, request, jsonify, current_app, send_from_directory
 from app.services.firebase_auth import require_auth, FirebaseAuthService
 from app.services.data_pipeline import HealthDataPipeline
 from app.services.feature_engineering import HealthFeatureEngineer
@@ -15,7 +15,9 @@ import io
 from flask import send_file
 from reportlab.pdfgen import canvas
 import logging
- 
+import requests
+import math
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +50,25 @@ def data_input():
 def risk_report():
     """Risk assessment report view"""
     return render_template('risk_report.html')
+
+
+@main_bp.route('/about')
+def about():
+    """About Us page - visible to all users"""
+    return render_template('about.html')
+
+
+@main_bp.route('/feedback')
+def feedback():
+    """Feedback Form page - requires authentication"""
+    return render_template('feedback.html')
+
+
+@main_bp.route('/assets/<path:filename>')
+def serve_assets(filename):
+    """Serve static assets from the assets folder"""
+    assets_dir = os.path.join(current_app.root_path, 'assets')
+    return send_from_directory(assets_dir, filename)
 
 
 # ============== API Routes ==============
@@ -754,3 +775,86 @@ def suggest_doctors_by_city():
     except Exception as e:
         logger.error(f"Error suggesting doctors by city: {e}")
         return jsonify({'error': 'Failed to suggest doctors'}), 500
+
+
+@api_bp.route('/feedback/submit', methods=['POST'])
+def submit_feedback():
+    """
+    Submit user feedback to Firestore
+    
+    Request body:
+    {
+        "name": "string",
+        "email": "string",
+        "category": "string",
+        "rating": "int",
+        "message": "string",
+        "allow_followup": "boolean"
+    }
+    """
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        required_fields = ['name', 'email', 'category', 'message']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'error': f'Missing required field: {field}'}), 400
+        
+        # Sanitize inputs
+        feedback_data = {
+            'name': sanitize_input(data.get('name', '')),
+            'email': sanitize_input(data.get('email', '')),
+            'category': sanitize_input(data.get('category', '')),
+            'rating': int(data.get('rating', 0)),
+            'message': sanitize_input(data.get('message', '')),
+            'allow_followup': data.get('allow_followup', False),
+            'timestamp': __import__('datetime').datetime.now(),
+            'status': 'new'
+        }
+        
+        # Validate message length
+        if len(feedback_data['message']) < 10:
+            return jsonify({'error': 'Feedback message must be at least 10 characters'}), 400
+        
+        # Store in Firestore
+        auth_service = FirebaseAuthService()
+        db = auth_service.db
+        
+        if db is not None:
+            db.collection('feedback').add(feedback_data)
+            logger.info(f'Feedback submitted by {feedback_data["email"]}')
+            
+            # Optional: Send confirmation email
+            try:
+                email_body = f"""Thank you for your feedback!
+
+Name: {feedback_data['name']}
+Category: {feedback_data['category']}
+Rating: {feedback_data['rating']}/5
+Message: {feedback_data['message']}
+
+We will review your feedback and work on improvements. If you allowed follow-up, our team may contact you at {feedback_data['email']}.
+
+Best regards,
+MedWhisper Team
+"""
+                send_email(
+                    to_email=feedback_data['email'],
+                    subject='MedWhisper - Feedback Received',
+                    body=email_body
+                )
+            except Exception as e:
+                logger.warning(f'Failed to send confirmation email: {e}')
+            
+            return jsonify({
+                'success': True,
+                'message': 'Feedback submitted successfully'
+            }), 200
+        else:
+            return jsonify({'error': 'Database connection failed'}), 500
+            
+    except Exception as e:
+        logger.error(f'Error submitting feedback: {e}')
+        return jsonify({'error': 'Failed to submit feedback'}), 500
+
