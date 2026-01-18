@@ -121,3 +121,5 @@ htmlcov/
 
 # Deployment
 *.pid
+
+app.py
