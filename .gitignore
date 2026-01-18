@@ -1,6 +1,5 @@
 # Prevent committing large or sensitive files
 models_store/
-data/
 logs/
 firebase-credentials.json
 .env
