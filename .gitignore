@@ -1,11 +1,9 @@
 # Prevent committing large or sensitive files
-models_store/
 logs/
 firebase-credentials.json
 .env
 __pycache__/
 *.pyc
-*.pkl
 *.joblib
 *.zip
 *.tar.gz
@@ -74,12 +72,6 @@ app_*.log
 # data/processed/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
-
-# Machine Learning Models (too large for git/Vercel)
-models_store/*.pkl
-models_store/*.joblib
-models_store/*.pth
-!models_store/.gitkeep
 
 # Large asset files
 app/static/images/*.png
